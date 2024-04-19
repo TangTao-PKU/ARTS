@@ -5,6 +5,9 @@
 </div>
 This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos"
 
+## Statement
+The project has undergone complete anonymization for reviewers to understand some implementation details that they may be interested in. However, due to the need for anonymization, dataset preparation and processing unavailable and will be fully open-sourced in subsequent rebuttals or after paper acceptance.
+
 ## Preparation
 
 1. Install dependencies. This project is developed on Ubuntu 18.04 with NVIDIA 3090 GPUs. We recommend you to use an [Anaconda](https://www.anaconda.com/) virtual environment.
@@ -25,7 +28,7 @@ sh requirements.sh
 
 ## Implementation
 ### Data Preparation
-The `./data` directory structure should follow the below hierarchy. All the processed annotation files will be avalible.
+The `./data` directory structure should follow the below hierarchy. All the processed annotation files will be available.
 ```
 ${Project}  
 |-- data  

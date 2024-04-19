@@ -268,18 +268,9 @@ class MPII(torch.utils.data.Dataset):
 
         if cfg.MODEL.name == 'ARTS':
             # default valid
-            # mesh_cams = mesh_cam.reshape(1, len(mesh_cam), 3).repeat(self.seqlen, axis=0)
-            # # joint_cam_h36ms = joint_cam_h36m.reshape(1, len(joint_cam_h36m), 3).repeat(self.seqlen, axis=0)
-            # pose_params = pose_param.reshape(1, len(pose_param)).repeat(self.seqlen, axis=0)
-            # shape_params = shape_param.reshape(1, len(shape_param)).repeat(self.seqlen, axis=0)
-            
             mesh_valid = np.ones((len(mesh_cam), 1), dtype=np.float32)
             reg_joint_valid = np.ones((len(joint_cam_h36m), 1), dtype=np.float32)
             lift_joint_valid = np.ones((len(joint_cam), 1), dtype=np.float32)
-
-            # mesh_valids = mesh_valid.reshape(1, len(mesh_valid), 1).repeat(self.seqlen, axis=0)
-            # lift_joint_valids = lift_joint_valid.reshape(1, len(lift_joint_valid), 1).repeat(self.seqlen, axis=0)
-            # reg_joint_valids = reg_joint_valid.reshape(1, len(reg_joint_valid), 1).repeat(self.seqlen, axis=0)
 
             inputs = {'pose2d': joint_img, 'img_feature': img_feat}
             targets = {'mesh': mesh_cam / 1000, 'lift_pose3d': joint_cam, 'reg_pose3d': joint_cam_h36m,

@@ -248,9 +248,6 @@ class PW3D(torch.utils.data.Dataset):
                                 'smpl_pose': torch.tensor(pose_param), 'smpl_shape': torch.tensor(shape_param)}
                     meta = {'mesh_valid': mesh_valid, 'lift_pose3d_valid': lift_joint_valid, 'reg_pose3d_valid': reg_joint_valid}
                 
-            # elif cfg.MODEL.name == 'PoseEst' and num == int(self.seqlen / 2):
-            #     posenet_joint_cam = joint_cam_coco
-            #     joint_valid = np.ones((len(joint_img_coco), 1), dtype=np.float32)
             elif cfg.MODEL.name == 'PoseEst':
                 posenet_joint_cam.append(joint_cam_coco.reshape(1, len(joint_cam_coco), 3))
                 valid = np.ones((len(joint_img_coco), 1), dtype=np.float32)
@@ -258,20 +255,8 @@ class PW3D(torch.utils.data.Dataset):
             
         joint_imgs = np.concatenate(joint_imgs)
         img_features = np.concatenate(img_features)
-        # joint_cam_h36ms = np.concatenate(joint_cam_h36ms)
-        # reg_joint_valids = np.concatenate(reg_joint_valid)
         
         if cfg.MODEL.name == 'ARTS':
-            # mesh_cams = np.concatenate(mesh_cams)
-            # mesh_valids = np.concatenate(mesh_valids)
-            # pose_params = np.concatenate(pose_params)
-            # shape_params = np.concatenate(shape_params)
-            
-            # targets['mesh'] = mesh_cams / 1000
-            # targets['smpl_pose'] = pose_params
-            # targets['smpl_shape'] = shape_params
-            # meta['mesh_valid'] = mesh_valids
-            # meta['reg_pose3d_valid'] = reg_joint_valids
             inputs = {'pose2d': joint_imgs, 'img_feature': img_features}
             return inputs, targets, meta
         
@@ -284,9 +269,7 @@ class PW3D(torch.utils.data.Dataset):
         # root align joint, coco joint set
         pred_joint, target_joint = pred_joint - pred_joint[:, :,-2:-1, :], target_joint - target_joint[:, :,-2:-1, :]
         pred_joint, target_joint = pred_joint.detach().cpu().numpy(), target_joint.detach().cpu().numpy()
-        
-
-        # joint_mean_error = np.power((np.power((pred_joint - target_joint), 2)).sum(axis=2), 0.5).mean()
+    
         joint_mean_error = np.power((np.power((pred_joint - target_joint), 2)).sum(axis=3), 0.5).mean()
 
         return joint_mean_error
@@ -318,23 +301,7 @@ class PW3D(torch.utils.data.Dataset):
         gt_j3ds_h36m = []  # acc error for each sequence
         acc_error_h36m = 0.0
         last_seq_name = None
-        
-        # cfg.DATASET.stride = 1
-        # self.vid_indices = split_into_chunks_mesh(self.img_paths, self.seqlen, self.stride, self.poses, is_train=(set=='train'))
-        # print(annots)
-        # print(annots[10])
-        # print(annots.shape)
-        # print(sample_num)
-        # [[    0    15]
-        #  [    1    16]
-        #  [    2    17]
-        #  ... 
-        #  [35497 35512]
-        #  [35498 35513]
-        #  [35499 35514]] 
-        # [10 25]
-        # (34677, 2)
-        # 34677
+    
 
         for n in range(sample_num):
             start_index, end_index = self.vid_indices[n]
@@ -346,8 +313,6 @@ class PW3D(torch.utils.data.Dataset):
 
             joint_coord_out, joint_coord_gt = out['joint_coord'], out['joint_coord_target']
             # root joint alignment, coco joint set
-            # joint_coord_out = joint_coord_out - joint_coord_out[-2:-1]
-            # joint_coord_gt = joint_coord_gt - joint_coord_gt[-2:-1]
             
             joint_coord_out = joint_coord_out[self.seqlen // 2,:,:]
             joint_coord_gt = joint_coord_gt[self.seqlen // 2,:,:]
@@ -355,7 +320,6 @@ class PW3D(torch.utils.data.Dataset):
             joint_coord_gt = joint_coord_gt - joint_coord_gt[-2:-1]
             
             # pose error calculate
-            # mpjpe[n] = np.sqrt(np.sum((joint_coord_out - joint_coord_gt) ** 2, 1))
             mpjpe[n] = np.sqrt(np.sum((joint_coord_out - joint_coord_gt) ** 2, 1))
             
             seq_name = self.vid_names[mid_index]
@@ -366,13 +330,10 @@ class PW3D(torch.utils.data.Dataset):
                 accel_err = np.zeros((len(pred_j3ds,)))
                 accel_err[1:-1] = compute_error_accel(joints_pred=pred_j3ds, joints_gt=target_j3ds)
                 err = np.mean(np.array(accel_err))
-                # 每一段视频结尾计算依次acc并累加
                 acc_error_h36m += err.copy() * len(pred_j3ds)
-                # 复制中间帧重建结果用于计算acc
                 pred_j3ds_h36m = [joint_coord_out.copy()]
                 gt_j3ds_h36m = [joint_coord_gt.copy()]
             else:
-                # 都将中间帧pose结果append起来
                 pred_j3ds_h36m.append(joint_coord_out.copy())
                 gt_j3ds_h36m.append(joint_coord_gt.copy())
             last_seq_name = seq_name
@@ -383,10 +344,6 @@ class PW3D(torch.utils.data.Dataset):
         pred_j3ds = np.array(pred_j3ds_h36m)
         target_j3ds = np.array(gt_j3ds_h36m)
         accel_err = np.zeros((len(pred_j3ds,)))
-        # print(pred_j3ds.shape)
-        # print(target_j3ds.shape)
-        # (753, 19, 3)
-        # (753, 19, 3)
         accel_err[1:-1] = compute_error_accel(joints_pred=pred_j3ds, joints_gt=target_j3ds)
         err = np.mean(np.array(accel_err))
         acc_error_h36m += err.copy() * len(pred_j3ds)
@@ -432,18 +389,8 @@ class PW3D(torch.utils.data.Dataset):
             img_path = self.img_paths[mid_index]
 
             mesh_coord_out, mesh_coord_gt = out['mesh_coord'], out['mesh_coord_target']
-            # print(mesh_coord_out.shape)   # 6890*3
-            # print(mesh_coord_gt.shape)    # 16*6890*3
-            # mesh_coord_gt = mesh_coord_gt[self.seqlen // 2]
             mesh_coord_gt = mesh_coord_gt
-            #print(mesh_coord_out.shape) #(16, 6890, 3)
-            #print(mesh_coord_gt.shape) #(16, 6890, 3)
             joint_coord_out, joint_coord_gt = np.dot(self.joint_regressor_smpl, mesh_coord_out), np.dot(self.joint_regressor_smpl, mesh_coord_gt)
-            # print(joint_coord_out.shape) # (24, 3)
-            # print(joint_coord_gt.shape) # (24, 3)
-            # joint_coord_out, joint_coord_gt = out['joint_coord'], out['joint_coord_target']
-            # print(joint_coord_out.shape)(16, 17, 3)
-            # print(joint_coord_gt.shape)(16, 17, 3)
             
             # root joint alignment
             coord_out_cam = np.concatenate((mesh_coord_out, joint_coord_out))
@@ -480,7 +427,6 @@ class PW3D(torch.utils.data.Dataset):
             pred_j3d.append(pose_coord_out_h36m); gt_j3d.append(pose_coord_gt_h36m)
 
             seq_name = self.vid_names[mid_index]
-            # last_seq_name不为空并且seq_name为新的帧即没有新的帧了则计算acc
             if last_seq_name is not None and seq_name != last_seq_name:
                 pred_j3ds = np.array(pred_j3ds_h36m)
                 target_j3ds = np.array(gt_j3ds_h36m)
@@ -531,5 +477,3 @@ class PW3D(torch.utils.data.Dataset):
         acc_error = acc_error_h36m / sample_num
         eval_summary = 'H36M ACCEL (mm/s^2) >> tot: %.2f\n ' % (acc_error)
         print(eval_summary)
-
-        # import pdb;pdb.set_trace()

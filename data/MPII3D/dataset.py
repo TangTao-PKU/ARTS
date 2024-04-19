@@ -461,20 +461,8 @@ class MPII3D(torch.utils.data.Dataset):
         
         joint_imgs = np.concatenate(joint_imgs)
         img_features = np.concatenate(img_features)
-        # joint_cam_h36ms = np.concatenate(joint_cam_h36ms)
-        # reg_joint_valids = np.concatenate(reg_joint_valid)
 
         if cfg.MODEL.name == 'ARTS':
-            # mesh_cams = np.concatenate(mesh_cams)
-            # mesh_valids = np.concatenate(mesh_valids)
-            # pose_params = np.concatenate(pose_params)
-            # shape_params = np.concatenate(shape_params)
-
-            # targets['mesh'] = mesh_cams / 1000
-            # targets['smpl_pose'] = pose_params
-            # targets['smpl_shape'] = shape_params
-            # meta['mesh_valid'] = mesh_valids
-
             inputs = {'pose2d': joint_imgs, 'img_feature': img_features}
             return inputs, targets, meta
         

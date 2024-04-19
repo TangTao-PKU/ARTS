@@ -95,12 +95,6 @@ def sparse_python_to_torch(sp_python):
 
 
 class my_sparse_mm(torch.autograd.Function):
-    """
-    this function is forked from https://github.com/xbresson/spectral_graph_convnets
-    Implementation of a new autograd function for sparse variables,
-    called "my_sparse_mm", by subclassing torch.autograd.Function
-    and implementing the forward and backward passes.
-    """
 
     def forward(self, W, x):  # W is SPARSE
         print("CHECK sparse W: ", W.is_cuda)

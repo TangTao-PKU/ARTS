@@ -199,7 +199,6 @@ def main(args):
         num_frames = len(os.listdir(image_folder))
         # img_shape = cv2.imread(osp.join(image_folder, '000900.jpg')).shape
         img_shape = cv2.imread(osp.join(image_folder, 'image_00000.jpg')).shape
-        # img_shape = cv2.imread(osp.join(image_folder, '00000057.jpg')).shape
         output_path = osp.join('./output/demo_output', os.path.basename(video_file))
         Path(output_path).mkdir(parents=True, exist_ok=True)
         
@@ -453,7 +452,6 @@ def main(args):
     save_path = os.path.join(output_path, save_name)
 
     images_to_video(img_folder=output_img_folder, output_vid_file=save_path)
-    # images_to_video(img_folder=input_img_folder, output_vid_file=os.path.join(output_path, vid_name))
     print(f"Saving result video to {os.path.abspath(save_path)}")
     # shutil.rmtree(output_img_folder)
     shutil.rmtree(input_img_folder)

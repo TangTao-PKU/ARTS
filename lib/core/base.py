@@ -29,9 +29,7 @@ def get_dataloader(args, dataset_names, is_train):
     dataset_list, dataloader_list = [], []
 
     print(f"==> Preparing {dataset_split} Dataloader...")
-    # dataset_names train_list: ['Human36M', 'PW3D', 'MPII3D', 'COCO', 'MPII']
     for name in dataset_names:
-        # eval执行字符串运算，此处为创建PW3D.dataset, MPII3D.dataset等类的对象
         dataset = eval(f'{name}.dataset')(dataset_split.lower(), args=args)
         print("# of {} {} data: {}".format(dataset_split, name, len(dataset)))
         dataloader = DataLoader(dataset,
@@ -123,7 +121,6 @@ class Trainer:
         self.edge_add_epoch = cfg.TRAIN.edge_loss_start
         self.shape_weight = cfg.MODEL.shape_loss_weight
         self.pose_weight = cfg.MODEL.pose_loss_weight
-        # self.vertices_weight = cfg.MODEL.vertices_loss_weight
 
         if cfg.TRAIN.wandb:
             wandb.init(config=cfg,
@@ -144,14 +141,11 @@ class Trainer:
             # convert to cuda
             input_pose, input_feat = inputs['pose2d'].cuda(), inputs['img_feature'].cuda()
             gt_lift3dpose, gt_reg3dpose, gt_mesh = targets['lift_pose3d'].cuda(), targets['reg_pose3d'].cuda(), targets['mesh'].cuda()
-            # gt_smplpose, gt_smplshape, gt_smplcam = targets['smpl_pose'].cuda(), targets['smpl_shape'].cuda(), targets['smpl_cam'].cuda()
             gt_smplpose, gt_smplshape = targets['smpl_pose'].cuda(), targets['smpl_shape'].cuda()
             val_lift3dpose, val_reg3dpose, val_mesh = meta['lift_pose3d_valid'].cuda(), meta['reg_pose3d_valid'].cuda(), meta['mesh_valid'].cuda()
-            # print(gt_smplpose.shape)#torch.Size([32, 16, 72])
-            # print(gt_smplshape.shape)#torch.Size([32, 16, 10])
             
             pose3d, evo_pose, init_smpl_pose, init_smpl_shape, pred_mesh,smploutput = self.model(input_pose, input_feat, is_train=True) 
-            # pred_pose由mesh回归
+
             pred_pose = torch.matmul(self.J_regressor[None, :, :], pred_mesh * 1000)
             
             loss1, loss2, loss4, loss5, loss6 = self.loss[0](pred_mesh, gt_mesh, val_mesh),  \
@@ -183,17 +177,9 @@ class Trainer:
                                                             mask_3d=None)
             mid_smpl_loss = self.shape_weight * smpl_shape_loss + self.pose_weight * smpl_pose_loss
 
-            # sequence pose velocity loss 不合理 应当使用pose_velocity_loss
-            # pred_smpl_pose_motion = smploutput[-1]['theta'][:,1:,3:75] - smploutput[-1]['theta'][:,:-1,3:75]
-            # gt_smpl_pose_motion = gt_smplpose[:,1:] - gt_smplpose[:,:-1]
-            # smpl_velocity_loss = self.loss[5](pred_smpl_pose_motion,gt_smpl_pose_motion,target_valid=None) * 0.1
-
 
             loss = loss1 + loss4 + mid_smpl_loss
 
-            # import pdb; pdb.set_trace()
-
-            # 从第2个epoch后加入edge损失 后面代码也要修改
             if epoch > self.edge_add_epoch:
                 loss3 = self.edge_weight * self.loss[2](pred_mesh, gt_mesh)
                 loss += loss3
@@ -362,13 +348,8 @@ class LiftTrainer:
             cam_joint = cam_joint.view(-1, cfg.DATASET.seqlen, self.num_joint, 3)
 
             mpjpe_loss = self.loss(pred_joint, cam_joint, joint_valid)
-            pred_joint_motion = pred_joint[:,1:] - pred_joint[:,:-1]
-            gt_joint_motion = cam_joint[:,1:] - cam_joint[:,:-1]
-            velocity_valid = joint_valid[:,:-1]
-            velocity_loss = self.loss(pred_joint_motion, gt_joint_motion, velocity_valid)
-            # loss = mpjpe_loss*0.1 + velocity_loss*0.1 + pa_loss.to('cuda')*0.1
             
-            loss = mpjpe_loss*0.1 + velocity_loss*0.1
+            loss = mpjpe_loss
 
             self.optimizer.zero_grad()
             loss.backward()   # RuntimeError: grad can be implicitly created only for scalar outputs
@@ -427,7 +408,6 @@ class LiftTester:
                 img_features = img_features.cuda().float()
 
                 pred_joint = self.model(img_joint, img_features)
-                # pred_joint = pred_joint.view(-1, self.num_joint, 3)
                 pred_joint = pred_joint.view(-1, cfg.DATASET.seqlen, self.num_joint, 3)
 
                 mpjpe = self.val_dataset.compute_joint_err(pred_joint, cam_joint)

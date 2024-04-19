@@ -22,7 +22,6 @@ os.environ['CUDA_VISIBLE_DEVICES'] = str(args.gpu)
 print("Work on GPU: ", os.environ['CUDA_VISIBLE_DEVICES'])
 
 import torch
-# torch.backends.cudnn.enabled = False
 import __init_path
 import shutil
 import random

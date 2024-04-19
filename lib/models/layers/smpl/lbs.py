@@ -1,18 +1,4 @@
-# -*- coding: utf-8 -*-
 
-# Max-Planck-Gesellschaft zur Förderung der Wissenschaften e.V. (MPG) is
-# holder of all proprietary rights on this computer program.
-# You can only use this computer program if you have closed
-# a license agreement with MPG or you get the right to use the computer
-# program from someone who is authorized to grant you that right.
-# Any use of the computer program without a valid license is prohibited and
-# liable to prosecution.
-#
-# Copyright©2019 Max-Planck-Gesellschaft zur Förderung
-# der Wissenschaften e.V. (MPG). acting on behalf of its Max Planck Institute
-# for Intelligent Systems. All rights reserved.
-#
-# Contact: ps-license@tuebingen.mpg.de
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -1786,12 +1772,7 @@ def rotmat_to_quat(rotation_matrix):
 
 def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
     """
-    This function is borrowed from https://github.com/kornia/kornia
-
     Convert 3x4 rotation matrix to 4d quaternion vector
-
-    This algorithm is based on algorithm described in
-    https://github.com/KieranWynn/pyquaternion/blob/master/pyquaternion/quaternion.py#L201
 
     Args:
         rotation_matrix (Tensor): the rotation matrix to convert.
@@ -1906,8 +1887,6 @@ def rotmat_to_aa(rotmat):
 
 def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
     """
-    This function is borrowed from https://github.com/kornia/kornia
-
     Convert quaternion vector to angle axis of rotation.
 
     Adapted from ceres C++ library: ceres-solver/include/ceres/rotation.h

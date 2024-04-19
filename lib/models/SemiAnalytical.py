@@ -11,11 +11,9 @@ from graph_utils import build_verts_joints_relation
 from models.backbones.mesh import Mesh
 from functools import partial
 
-# from models.update import UpdateBlock, Regressor
 from models.spin import RegressorSpin
 from lib.models.TIK import TIK
 
-# from models.HSCR import HSCR
 from models.Residual import Residual
 from math import sqrt
 from smpl import SMPL
@@ -221,7 +219,7 @@ class SemiAnalytical(nn.Module):
             self.data_struct = Struct(**pickle.load(smpl_file, encoding='latin1'))
         self.shapedirs = self.data_struct.shapedirs
         self.shapedirs = self.shapedirs[:, :, :10]
-        # 先转为numpy
+
         self.shapedirs = self.shapedirs.r.reshape(-1,10)  
         self.shapedirs = torch.tensor(self.shapedirs)
         self.inv_shapedirs = torch.linalg.pinv(self.shapedirs)
@@ -287,7 +285,6 @@ class SemiAnalytical(nn.Module):
             skeleten = self.human36_skeleton
 
         for (joint0, joint1) in skeleten:
-            # 计算关节点之间的差值向量
             diff_vector = mean_pose[:, joint1] - mean_pose[:, joint0]                   # torch.Size([32, 3])
             vector_bone_length = torch.sqrt(diff_vector[:,0]**2 + diff_vector[:,1]**2 + diff_vector[:,2]**2)        # torch.Size([32])
 
@@ -296,7 +293,6 @@ class SemiAnalytical(nn.Module):
             mean_bone_length = torch.mean(bone_length, dim=1)                           # torch.Size([32])
             pred_mean_bones[:,index] = mean_bone_length
             scaled_diff_vector = mean_bone_length.unsqueeze(1) * diff_vector            # torch.Size([32, 3])
-            # 将差值向量添加到相应的关节点上
             mean_pose[:, joint1] += (mean_bone_length / vector_bone_length - 1.).unsqueeze(1) * scaled_diff_vector
             index += 1
 
@@ -308,7 +304,6 @@ class SemiAnalytical(nn.Module):
         inv_mesh2shape = inv_mesh2shape[:, None, :]
         inv_mesh2shape = inv_mesh2shape.repeat(1,cfg.DATASET.seqlen,1)
 
-        
         # SMPL Regressor
         output = self.regressorspin(img_feats_trans, init_pose=inv_pred2rot6d, init_shape=inv_mesh2shape, is_train=is_train, J_regressor=J_regressor)
         # attentive addtion
@@ -319,12 +314,3 @@ class SemiAnalytical(nn.Module):
 def get_model(num_joint, embed_dim):
     model = SemiAnalytical(num_joint, embed_dim)
     return model
-
-if __name__ == '__main__':
-    
-    model = get_model(17,64) # 模型初始化
-    model = model.cuda()
-    joint = torch.randn(32, 17, 3).cuda()
-    img = torch.randn(32, 16, 2048).cuda()
-    SemiAnalytical(joint,img)
-    model.eval()

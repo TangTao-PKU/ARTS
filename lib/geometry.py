@@ -20,7 +20,6 @@ def rodrigues(theta):
 
 
 def batch_rodrigues(axisang):
-    # This function is borrowed from https://github.com/MandyMo/pytorch_HMR/blob/master/src/util.py#L37
     # axisang N x 3
     axisang_norm = torch.norm(axisang + 1e-8, p=2, dim=1)
     angle = torch.unsqueeze(axisang_norm, -1)
@@ -36,8 +35,6 @@ def batch_rodrigues(axisang):
 
 def quat2mat(quat):
     """
-    This function is borrowed from https://github.com/MandyMo/pytorch_HMR/blob/master/src/util.py#L50
-
     Convert quaternion coefficients to rotation matrix.
     Args:
         quat: size = [batch_size, 4] 4 <===>(w, x, y, z)
@@ -67,8 +64,6 @@ def quat2mat(quat):
 
 def rotation_matrix_to_angle_axis(rotation_matrix):
     """
-    This function is borrowed from https://github.com/kornia/kornia
-
     Convert 3x4 rotation matrix to Rodrigues vector
 
     Args:
@@ -99,8 +94,6 @@ def rotation_matrix_to_angle_axis(rotation_matrix):
 
 def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
     """
-    This function is borrowed from https://github.com/kornia/kornia
-
     Convert quaternion vector to angle axis of rotation.
 
     Adapted from ceres C++ library: ceres-solver/include/ceres/rotation.h
@@ -152,13 +145,7 @@ def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
 
 def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
     """
-    This function is borrowed from https://github.com/kornia/kornia
-
     Convert 3x4 rotation matrix to 4d quaternion vector
-
-    This algorithm is based on algorithm described in
-    https://github.com/KieranWynn/pyquaternion/blob/master/pyquaternion/quaternion.py#L201
-
     Args:
         rotation_matrix (Tensor): the rotation matrix to convert.
 
@@ -235,8 +222,6 @@ def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
 
 def estimate_translation_np(S, joints_2d, joints_conf, focal_length=5000., img_size=224.):
     """
-    This function is borrowed from https://github.com/nkolot/SPIN/utils/geometry.py
-
     Find camera translation that brings 3D joints S closest to 2D the corresponding joints_2d.
     Input:
         S: (25, 3) 3D joint locations
@@ -279,8 +264,6 @@ def estimate_translation_np(S, joints_2d, joints_conf, focal_length=5000., img_s
 
 def estimate_translation(S, joints_2d, focal_length=5000., img_size=224.):
     """
-    This function is borrowed from https://github.com/nkolot/SPIN/utils/geometry.py
-
     Find camera translation that brings 3D joints S closest to 2D the corresponding joints_2d.
     Input:
         S: (B, 49, 3) 3D joint locations
