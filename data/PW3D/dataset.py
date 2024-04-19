@@ -134,7 +134,7 @@ class PW3D(torch.utils.data.Dataset):
             
             pid = ann['person_id']
             img_path = osp.join(str(pid), sequence_name, img_name) # person/video/img
-            vid_name = sequence_name + str(pid) # 按人划分的videos
+            vid_name = sequence_name + str(pid)
             
             seq_idx = str(sequence_name)
             img_idx = str(int(img_name[6:-4]))
@@ -323,7 +323,6 @@ class PW3D(torch.utils.data.Dataset):
             mpjpe[n] = np.sqrt(np.sum((joint_coord_out - joint_coord_gt) ** 2, 1))
             
             seq_name = self.vid_names[mid_index]
-            # last_seq_name不为空并且seq_name为新的帧即没有新的帧了则计算arr
             if last_seq_name is not None and seq_name != last_seq_name:
                 pred_j3ds = np.array(pred_j3ds_h36m)
                 target_j3ds = np.array(gt_j3ds_h36m)
