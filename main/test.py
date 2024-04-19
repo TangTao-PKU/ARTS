@@ -9,7 +9,7 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
-parser = argparse.ArgumentParser(description='Test PMCE')
+parser = argparse.ArgumentParser(description='Test ARTS')
 
 parser.add_argument('--seed', type=int, default=123, help='random seed to use. Default=123')
 parser.add_argument('--cfg', type=str, help='experiment configure file name')
@@ -27,7 +27,7 @@ print("Work on GPU: ", os.environ['CUDA_VISIBLE_DEVICES'])
 import torch
 torch.manual_seed(args.seed)
 from core.base import Tester, LiftTester
-if cfg.MODEL.name == 'PMCE':
+if cfg.MODEL.name == 'ARTS':
     tester = Tester(args, load_dir=cfg.TEST.weight_path)  # if not args.debug else None
 elif cfg.MODEL.name == 'PoseEst':
     tester = LiftTester(args, load_dir=cfg.TEST.weight_path)  # if not args.debug else None

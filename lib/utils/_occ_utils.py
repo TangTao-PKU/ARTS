@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-# The codes are largely brought from https://github.com/isarandi/synthetic-occlusion.
 import functools
 import os.path
 import random

@@ -1,5 +1,4 @@
 DATASET:
-    # train_list: ['PW3D', 'MPII3D', 'Human36M', 'COCO', 'MPII']
     train_list: ['PW3D', 'MPII3D', 'Human36M']
     test_list: ['PW3D']
     input_joint_set: 'coco'
@@ -10,7 +9,7 @@ DATASET:
     stride: 1
 
 MODEL:
-    name: 'PMCE'
+    name: 'ARTS'
     hpe_dim: 256
     hpe_dep: 3
     joint_dim: 64
@@ -20,15 +19,12 @@ MODEL:
     joint_loss_weight: 0.001
     shape_loss_weight: 0.06
     pose_loss_weight: 0.06
-    # joint_loss_weight: 0.002
-    # shape_loss_weight: 0.1
-    # pose_loss_weight: 0.1
     posenet_pretrained: True
     posenet_path: './experiment/exp_03-01_16_10/checkpoint/best.pth.tar'   # 16frame
     # posenet_path: './experiment/exp_03-07_10_36/checkpoint/best.pth.tar'   # 2frame
     # posenet_path: './experiment/exp_03-07_10_38/checkpoint/best.pth.tar'   # 4frame
     # posenet_path: './experiment/exp_03-07_21_29/checkpoint/best.pth.tar'   # 8frame
-    # posenet_path: './experiment/exp_03-08_09_52/checkpoint/best.pth.tar'   # 32frame?
+    # posenet_path: './experiment/exp_03-08_09_52/checkpoint/best.pth.tar'   # 32frame
     
 
 TRAIN:

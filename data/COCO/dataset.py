@@ -286,11 +286,7 @@ class MSCOCO(torch.utils.data.Dataset):
         joint_img = joint_img.reshape(1, len(joint_img), 2).repeat(self.seqlen, axis=0)
         img_feat = img_feat.reshape(1, 2048).repeat(self.seqlen, axis=0)
 
-        if cfg.MODEL.name == 'PMCE':
-            # mesh_cams = mesh_cam.reshape(1, len(mesh_cam), 3).repeat(self.seqlen, axis=0)
-            # joint_cam_h36ms = joint_cam_h36m.reshape(1, len(joint_cam_h36m), 3).repeat(self.seqlen, axis=0)
-            # pose_params = pose_param.reshape(1, len(pose_param)).repeat(self.seqlen, axis=0)
-            # shape_params = shape_param.reshape(1, len(shape_param)).repeat(self.seqlen, axis=0)
+        if cfg.MODEL.name == 'ARTS':
             # default valid
             mesh_valid = np.ones((len(mesh_cam), 1), dtype=np.float32)
             reg_joint_valid = np.ones((len(joint_cam_h36m), 1), dtype=np.float32)
@@ -299,10 +295,6 @@ class MSCOCO(torch.utils.data.Dataset):
             error = self.get_fitting_error(tight_bbox, self.joint_imgs[idx], joint_img_coco[:17], self.joint_valids[idx])
             if error > self.fitting_thr:
                 mesh_valid[:], reg_joint_valid[:], lift_joint_valid[:] = 0, 0, 0
-
-            # mesh_valids = mesh_valid.reshape(1, len(mesh_valid), 1).repeat(self.seqlen, axis=0)
-            # lift_joint_valids = lift_joint_valid.reshape(1, len(lift_joint_valid), 1).repeat(self.seqlen, axis=0)
-            # reg_joint_valids = reg_joint_valid.reshape(1, len(reg_joint_valid), 1).repeat(self.seqlen, axis=0)
 
             inputs = {'pose2d': joint_img, 'img_feature': img_feat}
             targets = {'mesh': mesh_cam / 1000, 'lift_pose3d': joint_cam, 'reg_pose3d': joint_cam_h36m,

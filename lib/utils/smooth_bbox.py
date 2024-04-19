@@ -1,5 +1,3 @@
-# This script is borrowed from https://github.com/akanazawa/human_dynamics/blob/master/src/util/smooth_bbox.py
-# Adhere to their licence to use this script
 
 import numpy as np
 import scipy.signal as signal

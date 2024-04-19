@@ -137,8 +137,6 @@ class  GraphormerNet(nn.Module):
         x = rearrange(x, '(b j) t c -> b t j c', j=j)
         x = self.regression(x) # (b t (j * 3))
         x = x.view(b, t, j, -1)
-        # xout = self.fusion(x)
-        # xout = xout.squeeze(1)
         return x
 
 

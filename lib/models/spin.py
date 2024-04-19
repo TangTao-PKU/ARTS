@@ -1,5 +1,3 @@
-# This script is borrowed and extended from https://github.com/nkolot/SPIN/blob/master/models/hmr.py
-# Adhere to their licence to use this script
 
 import math
 import torch

@@ -236,7 +236,7 @@ class PW3D(torch.utils.data.Dataset):
 
             joint_imgs.append(joint_img_coco.reshape(1, len(joint_img_coco), 2))
             img_features.append(img_feature.reshape(1, len(img_feature)))
-            if cfg.MODEL.name == 'PMCE':
+            if cfg.MODEL.name == 'ARTS':
                 if num == int(self.seqlen / 2):
                     mesh_cam, joint_cam_smpl = self.get_smpl_coord(pose_param, shape_param, trans_param, gender)
                     mesh_cam = mesh_cam - root_coor
@@ -261,7 +261,7 @@ class PW3D(torch.utils.data.Dataset):
         # joint_cam_h36ms = np.concatenate(joint_cam_h36ms)
         # reg_joint_valids = np.concatenate(reg_joint_valid)
         
-        if cfg.MODEL.name == 'PMCE':
+        if cfg.MODEL.name == 'ARTS':
             # mesh_cams = np.concatenate(mesh_cams)
             # mesh_valids = np.concatenate(mesh_valids)
             # pose_params = np.concatenate(pose_params)

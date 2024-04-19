@@ -1,5 +1,4 @@
-# Some functions are borrowed from https://github.com/akanazawa/human_dynamics/blob/master/src/evaluation/eval_util.py
-# Adhere to their licence to use these functions
+
 from pathlib import Path
 
 import torch

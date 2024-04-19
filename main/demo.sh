@@ -1,1 +1,1 @@
-python ./main/run_demo.py --img_file /data-home/tangt/models/PMCE/data/3DPW-demo/imageFiles/outdoors_fencing_01 --gpu 0
+python ./main/run_demo.py --img_file /imageFiles/outdoors_fencing_01 --gpu 0

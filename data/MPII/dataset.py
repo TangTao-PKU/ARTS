@@ -266,7 +266,7 @@ class MPII(torch.utils.data.Dataset):
         joint_img = joint_img.reshape(1, len(joint_img), 2).repeat(self.seqlen, axis=0)
         img_feat = img_feat.reshape(1, 2048).repeat(self.seqlen, axis=0)
 
-        if cfg.MODEL.name == 'PMCE':
+        if cfg.MODEL.name == 'ARTS':
             # default valid
             # mesh_cams = mesh_cam.reshape(1, len(mesh_cam), 3).repeat(self.seqlen, axis=0)
             # # joint_cam_h36ms = joint_cam_h36m.reshape(1, len(joint_cam_h36m), 3).repeat(self.seqlen, axis=0)

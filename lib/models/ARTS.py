@@ -43,5 +43,3 @@ if __name__ == '__main__':
     img = torch.randn(1, 16, 2048).cuda()
     ARTS(pose,img,2)
     model.eval()
-
-# export PYTHONPATH=/data-home/tangt/models/models/Pose-baseline/lib

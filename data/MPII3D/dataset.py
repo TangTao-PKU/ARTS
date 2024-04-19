@@ -428,7 +428,7 @@ class MPII3D(torch.utils.data.Dataset):
             joint_imgs.append(joint_img_coco.reshape(1, len(joint_img_coco), 2))
             img_features.append(img_feature.reshape(1, 2048))
             
-            if cfg.MODEL.name == 'PMCE':
+            if cfg.MODEL.name == 'ARTS':
                 if num == int(self.seqlen / 2):
                     # default valid
                     mesh_cam, joint_cam_smpl, pose_param_trans = self.get_smpl_coord(pose_param, shape_param, trans_param, gender, cam_param_R, cam_param_t)
@@ -464,7 +464,7 @@ class MPII3D(torch.utils.data.Dataset):
         # joint_cam_h36ms = np.concatenate(joint_cam_h36ms)
         # reg_joint_valids = np.concatenate(reg_joint_valid)
 
-        if cfg.MODEL.name == 'PMCE':
+        if cfg.MODEL.name == 'ARTS':
             # mesh_cams = np.concatenate(mesh_cams)
             # mesh_valids = np.concatenate(mesh_valids)
             # pose_params = np.concatenate(pose_params)
@@ -512,7 +512,7 @@ class MPII3D(torch.utils.data.Dataset):
             joint_imgs.append(joint_img_coco.reshape(1, len(joint_img_coco), 2))
             img_features.append(img_feature.reshape(1, 2048))
             
-            if cfg.MODEL.name == 'PMCE':
+            if cfg.MODEL.name == 'ARTS':
                 if num == int(self.seqlen / 2):        
                     mesh_valid = np.zeros((6890, 1), dtype=np.float32)
                     reg_joint_valid = np.ones((len(joint_cam), 1), dtype=np.float32)
@@ -528,7 +528,7 @@ class MPII3D(torch.utils.data.Dataset):
         
         joint_imgs = np.concatenate(joint_imgs)
         img_features = np.concatenate(img_features)
-        if cfg.MODEL.name == 'PMCE':
+        if cfg.MODEL.name == 'ARTS':
             inputs = {'pose2d': joint_imgs, 'img_feature': img_features}
             return inputs, targets, meta
         

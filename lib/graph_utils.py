@@ -1,4 +1,3 @@
-# Copyright (c) Liuhao Ge. All Rights Reserved.
 r"""
 Graph utilities
 """

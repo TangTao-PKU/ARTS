@@ -100,7 +100,7 @@ class Human36M(torch.utils.data.Dataset):
 
         if cfg.MODEL.name == 'PoseEst':
             self.vid_indices = split_into_chunks_pose(self.img_names, self.seqlen, self.stride, is_train=(set=='train'))
-        elif cfg.MODEL.name == 'PMCE':
+        elif cfg.MODEL.name == 'ARTS':
             self.vid_indices = split_into_chunks_mesh(self.img_names, self.seqlen, self.stride, self.poses, is_train=(set=='train'))
 
 
@@ -513,14 +513,7 @@ class Human36M(torch.utils.data.Dataset):
             joint_imgs.append(joint_img.reshape(1, len(joint_img), 2))
             img_features.append(img_feature.reshape(1, 2048))
 
-            if cfg.MODEL.name == 'PMCE':
-                # joint_cam_h36ms.append(joint_cam_h36m.reshape(1, len(joint_cam_h36m), 3))
-                # reg_joint_valid = np.ones((len(joint_cam_h36m), 1), dtype=np.float32)
-                # reg_joint_valids.append(reg_joint_valid.reshape(1, len(reg_joint_valid), 1))
-                # default valid
-
-                # pose_params.append(pose_param.reshape(1, len(pose_param_trans)))
-                # shape_params.append(shape_param.reshape(1, len(shape_param)))
+            if cfg.MODEL.name == 'ARTS':
                 if num == int(self.seqlen / 2):
                     mesh_cam, joint_h36m_from_mesh, pose_param_trans = self.get_smpl_coord(smpl_param, cam_param)
                     # root relative camera coordinate
@@ -560,28 +553,13 @@ class Human36M(torch.utils.data.Dataset):
         
         joint_imgs = np.concatenate(joint_imgs)
         img_features = np.concatenate(img_features)
-        if cfg.MODEL.name == 'PMCE':
-            # joint_cam_h36ms = np.concatenate(joint_cam_h36ms)
-            # reg_joint_valids = np.concatenate(reg_joint_valid)
-            # mesh_cams = np.concatenate(mesh_cams)
-            # mesh_valids = np.concatenate(mesh_valids)
-            # pose_params = np.concatenate(pose_params)
-            # shape_params = np.concatenate(shape_params)
-
-            # targets['mesh'] = mesh_cams / 1000
-            # targets['smpl_pose'] = pose_params
-            # targets['smpl_shape'] = shape_params
-            # meta['mesh_valid'] = mesh_valids
-
+        if cfg.MODEL.name == 'ARTS':
             inputs = {'pose2d': joint_imgs, 'img_feature': img_features}
             return inputs, targets, meta
         
         elif cfg.MODEL.name == 'PoseEst':
             posenet_joint_cam = np.concatenate(posenet_joint_cam)
             joint_valid = np.concatenate(joint_valid)
-            # print(joint_imgs[0])
-            # print(posenet_joint_cam[0])
-            # print(posenet_joint_cam[0,:16,:2]-joint_imgs[0])
             return joint_imgs, posenet_joint_cam, joint_valid, img_features
 
     def normalize_screen_coordinates(self, X, w, h):
