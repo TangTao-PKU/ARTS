@@ -1,0 +1,33 @@
+DATASET:
+    train_list: ['Human36M', 'PW3D', 'MPII3D', 'COCO', 'MPII']
+    # train_list: ['COCO', 'MPII']
+    # train_list: ['PW3D']
+    test_list: ['PW3D']
+    input_joint_set: 'coco'
+    target_joint_set: 'coco'
+    workers: 8
+    use_gt_input: False
+    seqlen: 64
+    stride: 1
+
+MODEL:
+    name: 'PoseEst'
+    hpe_dim: 256
+    hpe_dep: 3
+
+TRAIN:
+    print_freq: 20
+    batch_size: 64
+    shuffle: True
+    begin_epoch: 1
+    end_epoch: 60
+    scheduler: 'step'
+    lr: 0.00005
+    lr_step: [10, 20, 30, 40, 50]
+    lr_factor: 0.8
+    optimizer: 'adam'
+    wandb: True
+
+TEST:
+    batch_size: 64
+    shuffle: False

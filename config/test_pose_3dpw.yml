@@ -1,0 +1,15 @@
+DATASET:
+    test_list: ['PW3D']
+    input_joint_set: 'coco'
+    target_joint_set: 'coco'
+    workers: 16
+    use_gt_input: False
+    seqlen: 8
+
+MODEL:
+    name: 'PoseEst'
+
+TEST:
+    batch_size: 64
+    shuffle: False
+    weight_path: './experiment/exp_03-07_21_29/checkpoint/best.pth.tar'
