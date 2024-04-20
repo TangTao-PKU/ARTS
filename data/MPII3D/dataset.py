@@ -296,15 +296,11 @@ class MPII3D(torch.utils.data.Dataset):
         # smpl parameters (pose: 72 dimension, shape: 10 dimension)
         smpl_pose = torch.FloatTensor(pose).view(-1, 3)
         smpl_shape = torch.FloatTensor(shape).view(1, -1)
-        # translation vector from smpl coordinate to h36m world coordinate
         trans = np.array(trans, dtype=np.float32).reshape(3)
-        # camera rotation and translation
         R, t = np.array(cam_param_R,dtype=np.float32).reshape(3, 3), np.array(cam_param_t,dtype=np.float32).reshape(3)
 
-        # change to mean shape if beta is too far from it
         smpl_shape[(smpl_shape.abs() > 3).any(dim=1)] = 0.
 
-        # transform world coordinate to camera coordinate
         root_pose = smpl_pose[self.smpl_root_joint_idx, :].numpy()
         angle = np.linalg.norm(root_pose)
         root_pose = transforms3d.axangles.axangle2mat(root_pose / angle, angle)
@@ -315,16 +311,11 @@ class MPII3D(torch.utils.data.Dataset):
 
         smpl_pose = smpl_pose.view(1, -1)
 
-        # get mesh and joint coordinates
         smpl_mesh_coord, smpl_joint_coord = self.mesh_model.layer[gender](smpl_pose, smpl_shape)
 
-        # incorporate face keypoints
         smpl_mesh_coord = smpl_mesh_coord.numpy().astype(np.float32).reshape(-1, 3);
         smpl_joint_coord = smpl_joint_coord.numpy().astype(np.float32).reshape(-1, 3)
-
-        # compenstate rotation (translation from origin to root joint was not cancled)
-        smpl_trans = np.array(trans, dtype=np.float32).reshape(
-            3)  # translation vector from smpl coordinate to h36m world coordinate
+        smpl_trans = np.array(trans, dtype=np.float32).reshape(3) 
         smpl_trans = np.dot(R, smpl_trans[:, None]).reshape(1, 3) + t.reshape(1, 3) / 1000
         root_joint_coord = smpl_joint_coord[self.smpl_root_joint_idx].reshape(1, 3)
         smpl_trans = smpl_trans - root_joint_coord + np.dot(R, root_joint_coord.transpose(1, 0)).transpose(1, 0)

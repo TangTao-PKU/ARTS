@@ -66,17 +66,6 @@ class RealNVP(nn.Module):
         return x
 
     def forward(self, x):
-        # DEVICE = x.device
-        # px = torch.arange(-5, 5, 0.5, device=DEVICE)
-        # py = torch.arange(-5, 5, 0.5, device=DEVICE)
-        # xx, yy = torch.meshgrid(px, py)
-        # samples = torch.stack((xx, yy), dim=2).reshape(-1, 2) + x[:1, :]
-        # prop_q = (0.25 * torch.exp(-torch.abs(samples) / 2))
-        # prop_g = torch.exp(self.log_prob(samples))
-        # prop_q = prop_q[:, 0] * prop_q[:, 1]
-        # prop = (prop_g * prop_q).sum(0).reshape(1, 1, 1) * 0.01 * 0.01
-
-        # return self.log_prob(x) + prop
         return self.log_prob(x)
 
 

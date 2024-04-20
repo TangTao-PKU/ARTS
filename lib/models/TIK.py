@@ -88,9 +88,9 @@ class FlowRegressor(nn.Module):
         super(FlowRegressor, self).__init__()
         self.num_joints = num_joints
 
-        h36m_jregressor = np.load('/data-home/models/ARTS/data/base_data/J_regressor_h36m.npy')
+        h36m_jregressor = np.load('./J_regressor_h36m.npy')
         self.smpl_layer = SMPL_layer(
-            '/data-home/models/ARTS/data/base_data/SMPL_NEUTRAL.pkl',
+            './data/base_data/SMPL_NEUTRAL.pkl',
             h36m_jregressor=h36m_jregressor,
             dtype=torch.float32
         )
@@ -121,9 +121,6 @@ class FlowRegressor(nn.Module):
             [1, 0] * (self.jts_tot_dim_2 // 2)
         ] * (num_stack2 // 2)).astype(np.float32))
 
-        # jts_tot_dim_1：24*6 + 32
-        # shape_tot_dim = 10
-        # num_stack = 16
         self.flow_j2s = ShapeCondRealNVP(jts_tot_dim = self.jts_tot_dim_1, shape_tot_dim = self.shape_tot_dim, num_stack=num_stack1, use_shape=False)
         self.flow_s2r = RealNVP(get_nets(self.jts_tot_dim_2), get_nett(self.jts_tot_dim_2), masks_2)
 
@@ -212,7 +209,6 @@ class FlowRegressor(nn.Module):
         )
 
         return output
-
 
 def align_root(xyz_17, num_joints=19):
     shape = xyz_17.shape

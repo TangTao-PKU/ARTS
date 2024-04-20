@@ -352,7 +352,7 @@ class LiftTrainer:
             loss = mpjpe_loss
 
             self.optimizer.zero_grad()
-            loss.backward()   # RuntimeError: grad can be implicitly created only for scalar outputs
+            loss.backward()  
             # loss.sum().backward()
             self.optimizer.step()
 

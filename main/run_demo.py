@@ -101,7 +101,7 @@ def get_joint_setting(mesh_model, joint_category='coco'):
             (13, 15),  # (5, 6), #(11, 12),
             (17, 11), (17, 12), (17, 18), (18, 5), (18, 6), (18, 0))
         flip_pairs = ((1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16))
-        model_chk_path = './experiment/exp_03-11_00_11/checkpoint/best.pth.tar'
+        model_chk_path = './checkpoint/best.pth.tar'
  
     else:
         raise NotImplementedError(f"{joint_category}: unknown joint set category")
@@ -452,10 +452,7 @@ def main(args):
 
     images_to_video(img_folder=output_img_folder, output_vid_file=save_path)
     print(f"Saving result video to {os.path.abspath(save_path)}")
-    # shutil.rmtree(output_img_folder)
-    shutil.rmtree(input_img_folder)
-    # if args.vid_file != 'None':
-    #     shutil.rmtree(image_folder)    
+    shutil.rmtree(input_img_folder)   
 
 
 if __name__ == '__main__':

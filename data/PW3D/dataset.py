@@ -441,7 +441,7 @@ class PW3D(torch.utils.data.Dataset):
             last_seq_name = seq_name
             
             mpjpe_h36m[n] = np.sqrt(np.sum((pose_coord_out_h36m - pose_coord_gt_h36m)**2,1))
-            pose_coord_out_h36m_aligned = rigid_align(pose_coord_out_h36m, pose_coord_gt_h36m) # perform rigid 
+            pose_coord_out_h36m_aligned = rigid_align(pose_coord_out_h36m, pose_coord_gt_h36m)
             pampjpe_h36m[n] = np.sqrt(np.sum((pose_coord_out_h36m_aligned - pose_coord_gt_h36m)**2,1))
             
             vis = cfg.TEST.vis

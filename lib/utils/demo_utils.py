@@ -15,18 +15,6 @@ from utils._img_utils import get_single_image_crop_demo
 
 
 def preprocess_video(video, joints2d, bboxes, frames, scale=1.0, crop_size=224):
-    """
-    Read video, do normalize and crop it according to the bounding box.
-    If there are bounding box annotations, use them to crop the image.
-    If no bounding box is specified but openpose detections are available, use them to get the bounding box.
-
-    :param video (ndarray): input video
-    :param joints2d (ndarray, NxJx3): openpose detections
-    :param bboxes (ndarray, Nx5): bbox detections
-    :param scale (float): bbox crop scaling factor
-    :param crop_size (int): crop width and height
-    :return: cropped video, cropped and normalized video, modified bboxes, modified joints2d
-    """
 
     if joints2d is not None:
         bboxes, time_pt1, time_pt2 = get_all_bbox_params(joints2d, vis_thresh=0.3)
@@ -127,15 +115,7 @@ def images_to_video(img_folder, output_vid_file):
 
 
 def convert_crop_cam_to_orig_img(cam, bbox, img_width, img_height):
-    '''
-    Convert predicted camera from cropped image coordinates
-    to original image coordinates
-    :param cam (ndarray, shape=(3,)): weak perspective camera in cropped img coordinates
-    :param bbox (ndarray, shape=(4,)): bbox coordinates (c_x, c_y, h)
-    :param img_width (int): original image width
-    :param img_height (int): original image height
-    :return:
-    '''
+
     cx, cy, h = bbox[:,0], bbox[:,1], bbox[:,2]
     hw, hh = img_width / 2., img_height / 2.
     sx = cam[:,0] * (1. / (img_width / h))

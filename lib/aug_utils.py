@@ -208,12 +208,6 @@ def flip_joints(joints, joints_vis, width, matched_parts):
 
 
 def multi_meshgrid(*args):
-    """
-    Creates a meshgrid from possibly many
-    elements (instead of only 2).
-    Returns a nd tensor with as many dimensions
-    as there are arguments
-    """
     args = list(args)
     template = [1 for _ in args]
     for i in range(len(args)):

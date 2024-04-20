@@ -216,18 +216,7 @@ def euler2mat(theta, to_4x4=False):
 
 
 def compute_error_accel(joints_gt, joints_pred, vis=None):
-    """
-    Computes acceleration error:
-        1/(n-2) \sum_{i=1}^{n-1} X_{i-1} - 2X_i + X_{i+1}
-    Note that for each frame that is not visible, three entries in the
-    acceleration error should be zero'd out.
-    Args:
-        joints_gt (Nx14x3).
-        joints_pred (Nx14x3).
-        vis (N).
-    Returns:
-        error_accel (N-2).
-    """
+
     # (N-2)x14x3
     accel_gt = joints_gt[:-2] - 2 * joints_gt[1:-1] + joints_gt[2:]
     accel_pred = joints_pred[:-2] - 2 * joints_pred[1:-1] + joints_pred[2:]

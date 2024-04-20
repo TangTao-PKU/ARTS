@@ -3,12 +3,6 @@ import numpy as np
 from torch.nn import functional as F
 
 def rodrigues(theta):
-    """Convert axis-angle representation to rotation matrix.
-    Args:
-        theta: size = [B, 3]
-    Returns:
-        Rotation matrix corresponding to the quaternion -- size = [B, 3, 3]
-    """
     l1norm = torch.norm(theta + 1e-8, p = 2, dim = 1)
     angle = torch.unsqueeze(l1norm, -1)
     normalized = torch.div(theta, angle)
@@ -34,13 +28,6 @@ def batch_rodrigues(axisang):
 
 
 def quat2mat(quat):
-    """
-    Convert quaternion coefficients to rotation matrix.
-    Args:
-        quat: size = [batch_size, 4] 4 <===>(w, x, y, z)
-    Returns:
-        Rotation matrix corresponding to the quaternion -- size = [batch_size, 3, 3]
-    """
     norm_quat = quat
     norm_quat = norm_quat / norm_quat.norm(p=2, dim=1, keepdim=True)
     w, x, y, z = norm_quat[:, 0], norm_quat[:, 1], norm_quat[:,
@@ -63,23 +50,6 @@ def quat2mat(quat):
 
 
 def rotation_matrix_to_angle_axis(rotation_matrix):
-    """
-    Convert 3x4 rotation matrix to Rodrigues vector
-
-    Args:
-        rotation_matrix (Tensor): rotation matrix.
-
-    Returns:
-        Tensor: Rodrigues vector transformation.
-
-    Shape:
-        - Input: :math:`(N, 3, 4)`
-        - Output: :math:`(N, 3)`
-
-    Example:
-        >>> input = torch.rand(2, 3, 4)  # Nx4x4
-        >>> output = tgm.rotation_matrix_to_angle_axis(input)  # Nx3
-    """
     if rotation_matrix.shape[1:] == (3,3):
         rot_mat = rotation_matrix.reshape(-1, 3, 3)
         hom = torch.tensor([0, 0, 1], dtype=torch.float32,
@@ -93,25 +63,6 @@ def rotation_matrix_to_angle_axis(rotation_matrix):
 
 
 def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
-    """
-    Convert quaternion vector to angle axis of rotation.
-
-    Adapted from ceres C++ library: ceres-solver/include/ceres/rotation.h
-
-    Args:
-        quaternion (torch.Tensor): tensor with quaternions.
-
-    Return:
-        torch.Tensor: tensor with angle axis of rotation.
-
-    Shape:
-        - Input: :math:`(*, 4)` where `*` means, any number of dimensions
-        - Output: :math:`(*, 3)`
-
-    Example:
-        >>> quaternion = torch.rand(2, 4)  # Nx4
-        >>> angle_axis = tgm.quaternion_to_angle_axis(quaternion)  # Nx3
-    """
     if not torch.is_tensor(quaternion):
         raise TypeError("Input type is not a torch.Tensor. Got {}".format(
             type(quaternion)))
@@ -144,22 +95,6 @@ def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
 
 
 def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
-    """
-    Convert 3x4 rotation matrix to 4d quaternion vector
-    Args:
-        rotation_matrix (Tensor): the rotation matrix to convert.
-
-    Return:
-        Tensor: the rotation in quaternion
-
-    Shape:
-        - Input: :math:`(N, 3, 4)`
-        - Output: :math:`(N, 4)`
-
-    Example:
-        >>> input = torch.rand(4, 3, 4)  # Nx3x4
-        >>> output = tgm.rotation_matrix_to_quaternion(input)  # Nx4
-    """
     if not torch.is_tensor(rotation_matrix):
         raise TypeError("Input type is not a torch.Tensor. Got {}".format(
             type(rotation_matrix)))
@@ -221,14 +156,6 @@ def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
 
 
 def estimate_translation_np(S, joints_2d, joints_conf, focal_length=5000., img_size=224.):
-    """
-    Find camera translation that brings 3D joints S closest to 2D the corresponding joints_2d.
-    Input:
-        S: (25, 3) 3D joint locations
-        joints: (25, 3) 2D joint locations and confidence
-    Returns:
-        (3,) camera translation vector
-    """
 
     num_joints = S.shape[0]
     # focal length
@@ -263,14 +190,6 @@ def estimate_translation_np(S, joints_2d, joints_conf, focal_length=5000., img_s
 
 
 def estimate_translation(S, joints_2d, focal_length=5000., img_size=224.):
-    """
-    Find camera translation that brings 3D joints S closest to 2D the corresponding joints_2d.
-    Input:
-        S: (B, 49, 3) 3D joint locations
-        joints: (B, 49, 3) 2D joint locations and confidence
-    Returns:
-        (B, 3) camera translation vectors
-    """
 
     device = S.device
     # Use only joints 25:49 (GT joints)
@@ -289,13 +208,6 @@ def estimate_translation(S, joints_2d, focal_length=5000., img_size=224.):
 
 
 def rot6d_to_rotmat_spin(x):
-    """Convert 6D rotation representation to 3x3 rotation matrix.
-    Based on Zhou et al., "On the Continuity of Rotation Representations in Neural Networks", CVPR 2019
-    Input:
-        (B,6) Batch of 6-D rotation representations
-    Output:
-        (B,3,3) Batch of corresponding rotation matrices
-    """
     x = x.view(-1,3,2)
     a1 = x[:, :, 0]
     a2 = x[:, :, 1]

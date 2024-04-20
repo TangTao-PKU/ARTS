@@ -14,7 +14,6 @@ from functools import partial
 from models.spin import RegressorSpin
 from lib.models.TIK import TIK
 
-from models.Residual import Residual
 from math import sqrt
 from smpl import SMPL
 import pickle

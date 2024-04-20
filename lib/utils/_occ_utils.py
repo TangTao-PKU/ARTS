@@ -11,13 +11,10 @@ import PIL.Image
 
 
 def main():
-    """Demo of how to use the code"""
 
     path = sys.argv[1]
 
-    print('Loading occluders from Pascal VOC dataset...')
     occluders = load_occluders(pascal_voc_root_path=path)
-    print('Found {} suitable objects'.format(len(occluders)))
 
     original_im = cv2.resize(skimage.data.astronaut(), (256, 256))
     fig, axarr = plt.subplots(3, 3, figsize=(7, 7))
@@ -116,8 +113,6 @@ def get_motion_occlusions(img_shape, occluders, seqlen):
 
 
 def occlude_with_objects(im, occluders):
-    """Returns an augmented version of `im`, containing some occluders from the Pascal VOC dataset."""
-
     result = im.copy()
     width_height = np.asarray([im.shape[1], im.shape[0]])
     im_scale_factor = min(width_height) / 256
@@ -142,16 +137,6 @@ def occlude_with_objects(im, occluders):
 
 
 def paste_over(im_src, im_dst, center):
-    """Pastes `im_src` onto `im_dst` at a specified position, with alpha blending, in place.
-    Locations outside the bounds of `im_dst` are handled as expected (only a part or none of
-    `im_src` becomes visible).
-    Args:
-        im_src: The RGBA image to be pasted onto `im_dst`. Its size can be arbitrary.
-        im_dst: The target image.
-        alpha: A float (0.0-1.0) array of the same size as `im_src` controlling the alpha blending
-            at each pixel. Large values mean more visibility for `im_src`.
-        center: coordinates in `im_dst` where the center of `im_src` should be placed.
-    """
 
     width_height_src = np.asarray([im_src.shape[1], im_src.shape[0]])
     width_height_dst = np.asarray([im_dst.shape[1], im_dst.shape[0]])
@@ -177,9 +162,7 @@ def paste_over(im_src, im_dst, center):
 
 
 def resize_by_factor(im, factor):
-    """Returns a copy of `im` resized by `factor`, using bilinear interp for up and area interp
-    for downscaling.
-    """
+
     new_size = tuple(np.round(np.array([im.shape[1], im.shape[0]]) * factor).astype(int))
     interp = cv2.INTER_LINEAR if factor > 1.0 else cv2.INTER_AREA
     return cv2.resize(im, new_size, fx=factor, fy=factor, interpolation=interp)
@@ -192,12 +175,7 @@ def list_filepaths(dirpath):
 
 
 def get_cam_noise(bboxes, img_width, img_height, seqlen):
-    """
-    :param bbox: seqlen x 4
-    :param img_width: scalar
-    :param img_height: scalar
-    :return:
-    """
+
     choice = random.choice([1,2,3,4,5,6,7,8,9,10,11,12])
 
     result = bboxes.copy()

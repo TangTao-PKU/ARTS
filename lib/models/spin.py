@@ -9,15 +9,9 @@ import torchvision.models.resnet as resnet
 from geometry import rot6d_to_rotmat, rotation_matrix_to_angle_axis
 from models.smpl_mps import SMPL
 
-SMPL_MODEL_DIR = 'data/base_data'
-SMPL_MEAN_PARAMS = 'data/base_data/smpl_mean_params.npz'
-BASE_DATA_DIR = 'data/base_data'
 
 class Bottleneck(nn.Module):
-    """
-    Redefinition of Bottleneck residual block
-    Adapted from the official PyTorch implementation
-    """
+
     expansion = 4
 
     def __init__(self, inplanes, planes, stride=1, downsample=None):
@@ -297,11 +291,7 @@ class RegressorSpin(nn.Module):
 
 
 def hmr(smpl_mean_params=SMPL_MEAN_PARAMS, pretrained=True, **kwargs):
-    """
-    Constructs an HMR model with ResNet50 backbone.
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-    """
+
     model = HMR(Bottleneck, [3, 4, 6, 3], smpl_mean_params, **kwargs)
     if pretrained:
         resnet_imagenet = resnet.resnet50(pretrained=True)
@@ -327,15 +317,7 @@ def projection(pred_joints, pred_camera):
 
 def perspective_projection(points, rotation, translation,
                            focal_length, camera_center):
-    """
-    This function computes the perspective projection of a set of points.
-    Input:
-        points (bs, N, 3): 3D points
-        rotation (bs, 3, 3): Camera rotation
-        translation (bs, 3): Camera translation
-        focal_length (bs,) or scalar: Focal length
-        camera_center (bs, 2): Camera center
-    """
+
     batch_size = points.shape[0]
     K = torch.zeros([batch_size, 3, 3], device=points.device)
     K[:,0,0] = focal_length
