@@ -235,8 +235,7 @@ def main(args):
     dataset_info = pose_model.cfg.data['test'].get('dataset_info', None)
     if dataset_info is None:
         warnings.warn(
-            'Please set `dataset_info` in the config.'
-            'Check https://github.com/open-mmlab/mmpose/pull/663 for details.',
+            'Please set `dataset_info` in the config.',
             DeprecationWarning)
     else:
         dataset_info = DatasetInfo(dataset_info)

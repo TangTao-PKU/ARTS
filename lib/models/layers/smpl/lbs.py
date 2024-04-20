@@ -31,9 +31,6 @@ def find_dynamic_lmk_idx_and_bcoords(vertices, pose, dynamic_lmk_faces_idx,
         and then use a pre-computed look-up table to find the faces and the
         barycentric coordinates that will be used.
 
-        Special thanks to Soubhik Sanyal (soubhik.sanyal@tuebingen.mpg.de)
-        for providing the original TensorFlow implementation and for the LUT.
-
         Parameters
         ----------
         vertices: torch.tensor BxVx3, dtype = torch.float32
