@@ -126,9 +126,9 @@ def convert_crop_cam_to_orig_img(cam, bbox, img_width, img_height):
     return orig_cam
 
 
-def prepare_rendering_results(pmce_results, nframes):
+def prepare_rendering_results(_results, nframes):
     frame_results = [{} for _ in range(nframes)]
-    for person_id, person_data in pmce_results.items():
+    for person_id, person_data in _results.items():
         for idx, frame_id in enumerate(person_data['frame_ids']):
             frame_results[frame_id][person_id] = {
                 'verts': person_data['mesh'][idx],
