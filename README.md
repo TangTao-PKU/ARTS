@@ -1,7 +1,7 @@
 # ARTS
 <div align="center">
 
-  <h1 align="center">ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos</h1>
+  <h1 align="center">ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos (ACM MM 2024)</h1>
 </div>
 This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos"
 
