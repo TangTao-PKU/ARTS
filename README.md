@@ -8,6 +8,11 @@ This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical 
 ## Statement
 The project has undergone complete anonymization for reviewers to understand some implementation details that they may be interested in. However, due to the need for anonymization, dataset preparation and processing are unavailable yet and these will be fully open-sourced in subsequent rebuttals or after paper acceptance.
 
+## To-Do List
+
+* [ ] Upload latest code and data processing.
+* [ ] Release all checkpoints.
+
 ## Preparation
 
 1. Install dependencies. This project is developed on Ubuntu 18.04 with NVIDIA 3090 GPUs. We recommend you to use an [Anaconda](https://www.anaconda.com/) virtual environment.
