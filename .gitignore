@@ -5,6 +5,8 @@
 *.mp4
 *.pth
 
+ViTpose/
+mmcv/
 data/
 demo/
 pose_detector/
