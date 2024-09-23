@@ -17,7 +17,7 @@ from functools import partial
 # from models.update import UpdateBlock, Regressor
 from models.spin import RegressorSpin
 # from models.simple3dposeBaseSMPL import Simple3DPoseBaseSMPL
-from models.NIKITS import NIKITS
+from models.ARTS.lib.models.TIK import NIKITS
 # from models.layers.module import PoseNet, Pose2Feat, MeshNet, ParamRegressor
 
 # from models.HSCR import HSCR
