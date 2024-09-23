@@ -1,3 +1,8 @@
+"""
+This part reuses code from https://github.com/MandyMo/pytorch_HMR/blob/master/src/util.py
+which is part of a PyTorch port of SMPL.
+Thanks to Zhang Xiong (MandyMo) for making this great code available on github !
+"""
 
 import argparse
 from torch.autograd import gradcheck
@@ -6,6 +11,12 @@ from torch.autograd import Variable
 
 
 def quat2mat(quat):
+    """Convert quaternion coefficients to rotation matrix.
+    Args:
+        quat: size = [batch_size, 4] 4 <===>(w, x, y, z)
+    Returns:
+        Rotation matrix corresponding to the quaternion -- size = [batch_size, 3, 3]
+    """
     norm_quat = quat
     norm_quat = norm_quat / norm_quat.norm(p=2, dim=1, keepdim=True)
     w, x, y, z = norm_quat[:, 0], norm_quat[:, 1], norm_quat[:,

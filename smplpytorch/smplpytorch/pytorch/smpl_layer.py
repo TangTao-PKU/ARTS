@@ -16,6 +16,12 @@ class SMPL_Layer(Module):
                  center_idx=None,
                  gender='neutral',
                  model_root='smpl/native/models'):
+        """
+        Args:
+            center_idx: index of center joint in our computations,
+            model_root: path to pkl files for the model
+            gender: 'neutral' (default) or 'female' or 'male'
+        """
         super().__init__()
 
         self.center_idx = center_idx
@@ -60,6 +66,12 @@ class SMPL_Layer(Module):
                 th_pose_axisang,
                 th_betas=torch.zeros(1),
                 th_trans=torch.zeros(1)):
+        """
+        Args:
+        th_pose_axisang (Tensor (batch_size x 72)): pose parameters in axis-angle representation
+        th_betas (Tensor (batch_size x 10)): if provided, uses given shape parameters
+        th_trans (Tensor (batch_size x 3)): if provided, applies trans to joints and vertices
+        """
 
         batch_size = th_pose_axisang.shape[0]
         # Convert axis-angle representation to rotation matrix rep.
@@ -70,6 +82,8 @@ class SMPL_Layer(Module):
         th_pose_rotmat = th_pose_rotmat[:, 9:]
         th_pose_map = subtract_flat_id(th_pose_rotmat)
 
+        # Below does: v_shaped = v_template + shapedirs * betas
+        # If shape parameters are not provided
         if th_betas is None or bool(torch.norm(th_betas) == 0):
             th_v_shaped = self.th_v_template + torch.matmul(
                 self.th_shapedirs, self.th_betas.transpose(1, 0)).permute(2, 0, 1)

@@ -4,6 +4,10 @@ from smplpytorch.pytorch import rodrigues_layer
 
 
 def th_posemap_axisang(pose_vectors):
+    '''
+    Converts axis-angle to rotmat
+    pose_vectors (Tensor (batch_size x 72)): pose parameters in axis-angle representation
+    '''
     rot_nb = int(pose_vectors.shape[1] / 3)
     rot_mats = []
     for joint_idx in range(rot_nb):
@@ -45,4 +49,5 @@ def subtract_flat_id(rot_mats):
 
 
 def make_list(tensor):
+    # type: (List[int]) -> List[int]
     return tensor

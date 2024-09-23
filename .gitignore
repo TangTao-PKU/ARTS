@@ -5,4 +5,9 @@
 *.mp4
 *.pth
 
-
+data/
+demo/
+pose_detector/
+smplpytorch/
+ViTpose/
+experiment/

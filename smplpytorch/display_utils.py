@@ -14,6 +14,10 @@ def display_model(
         savepath=None,
         custom_skeleton=None,
         part_info=None):
+    """
+    Displays mesh batch_idx in batch of model_info, model_info as returned by
+    generate_random_model
+    """
     if ax is None:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
