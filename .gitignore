@@ -9,5 +9,6 @@ data/
 demo/
 pose_detector/
 smplpytorch/
-ViTpose/
+./ViTpose
+./mmcv
 experiment/
