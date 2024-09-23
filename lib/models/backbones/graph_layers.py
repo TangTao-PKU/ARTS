@@ -1,4 +1,6 @@
-
+"""
+This file contains definitions of layers used to build the GraphCNN
+"""
 from __future__ import division
 
 import torch
@@ -8,6 +10,9 @@ import math
 
 
 class SparseMM(torch.autograd.Function):
+    """Redefine sparse @ dense matrix multiplication to enable backpropagation.
+    The builtin matrix multiplication operation does not support backpropagation in some cases.
+    """
     @staticmethod
     def forward(ctx, sparse, dense):
         ctx.req_grad = dense.requires_grad

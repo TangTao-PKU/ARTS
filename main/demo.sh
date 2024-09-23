@@ -1,1 +1,1 @@
-python ./main/run_demo.py --img_file /imageFiles/outdoors_fencing_01 --gpu 0
+python ./main/run_demo.py --vid_file /data0/tangt/models/PMCE/demo/Internet-video/video8.mp4 --gpu 7

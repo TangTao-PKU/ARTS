@@ -6,6 +6,7 @@ import graph_utils
 from models.backbones.graph_layers import spmm
 
 def scipy_to_pytorch(A, U, D):
+    """Convert scipy sparse matrices to pytorch sparse matrix."""
     ptU = []
     ptD = []
     
@@ -25,6 +26,7 @@ def scipy_to_pytorch(A, U, D):
 
 
 def adjmat_sparse(adjmat, nsize=1):
+    """Create row-normalized sparse graph adjacency matrix."""
     adjmat = scipy.sparse.csr_matrix(adjmat)
     if nsize > 1:
         orig_adjmat = adjmat.copy()
@@ -45,6 +47,7 @@ def adjmat_sparse(adjmat, nsize=1):
     return adjmat
 
 def get_graph_params(filename, nsize=1):
+    """Load and process graph adjacency matrix and upsampling/downsampling matrices."""
     data = np.load(filename, encoding='latin1', allow_pickle=True)
     A = data['A']
     U = data['U']
@@ -54,6 +57,7 @@ def get_graph_params(filename, nsize=1):
     return A, U, D
 
 class Mesh(object):
+    """Mesh object that is used for handling certain graph operations."""
     def __init__(self, filename='data/base_data/mesh_downsampling.npz',
                  num_downsampling=1, nsize=1, device=torch.device('cuda')):
         self._A, self._U, self._D = get_graph_params(filename=filename, nsize=nsize)
@@ -63,10 +67,12 @@ class Mesh(object):
 
     @property
     def adjmat(self):
+        """Return the graph adjacency matrix at the specified subsampling level."""
         return self._A[self.num_downsampling].float()
 
     @property
     def ref_vertices(self):
+        """Return the template vertices at the specified subsampling level."""
         ref_vertices = self._ref_vertices
         for i in range(self.num_downsampling):
             ref_vertices = torch.spmm(self._D[i], ref_vertices)

@@ -1,4 +1,7 @@
-
+# Copyright (c) Liuhao Ge. All Rights Reserved.
+r"""
+Graph utilities
+"""
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
@@ -22,6 +25,9 @@ def build_adj(joint_num, skeleton, flip_pairs):
     return adj_matrix + np.eye(joint_num)
 
 def build_verts_joints_relation(joints, vertices):
+    '''
+    get the nearest joints of every vertex
+    '''
     vertix_num = vertices.shape[0]
     joints_num = joints.shape[0]
     nearest_relation = np.zeros((vertix_num))
@@ -40,6 +46,10 @@ def build_verts_joints_relation(joints, vertices):
     return nearest_relation, jv_sets
 
 def build_verts_joints_relation_and_adj(joints, vertices):
+    '''
+    get the nearest joints of every vertex
+    vertices first, then joints
+    '''
     vertix_num = vertices.shape[0]
     joints_num = joints.shape[0]
     adj_matrix = np.zeros((joints_num + vertix_num, joints_num + vertix_num))
@@ -86,6 +96,12 @@ def sparse_python_to_torch(sp_python):
 
 
 class my_sparse_mm(torch.autograd.Function):
+    """
+    this function is forked from https://github.com/xbresson/spectral_graph_convnets
+    Implementation of a new autograd function for sparse variables,
+    called "my_sparse_mm", by subclassing torch.autograd.Function
+    and implementing the forward and backward passes.
+    """
 
     def forward(self, W, x):  # W is SPARSE
         print("CHECK sparse W: ", W.is_cuda)

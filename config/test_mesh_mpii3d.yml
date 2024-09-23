@@ -1,4 +1,3 @@
-
 DATASET:
     test_list: ['MPII3D']
     input_joint_set: 'coco'
@@ -7,7 +6,7 @@ DATASET:
     use_gt_input: False
 
 MODEL:
-    name: 'ARTS'
+    name: 'PMCE'
     normal_loss_weight: 0.1
     edge_loss_weight: 20
     joint_loss_weight: 0.001

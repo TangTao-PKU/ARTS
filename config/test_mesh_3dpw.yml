@@ -7,7 +7,7 @@ DATASET:
     seqlen: 16
 
 MODEL:
-    name: 'ARTS'
+    name: 'PMCE'
     normal_loss_weight: 0.1
     edge_loss_weight: 20
     joint_loss_weight: 0.001
@@ -16,4 +16,4 @@ TEST:
     batch_size: 64
     shuffle: False
     vis: False
-    weight_path: './experiment/exp_04-03_09_59/checkpoint/best.pth.tar'
+    weight_path: './experiment/exp_06-15_15_37/checkpoint/best.pth.tar' 

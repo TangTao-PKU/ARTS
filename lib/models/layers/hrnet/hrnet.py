@@ -1,3 +1,8 @@
+# ------------------------------------------------------------------------------
+# Copyright (c) Microsoft
+# Licensed under the MIT License.
+# Written by Bin Xiao (Bin.Xiao@microsoft.com)
+# ------------------------------------------------------------------------------
 
 from __future__ import absolute_import, division, print_function
 
@@ -610,6 +615,8 @@ class PoseHighResolutionNet(nn.Module):
 
         if os.path.isfile(pretrained):
             pretrained_state_dict = torch.load(pretrained, map_location='cpu')
+            # if 'model' in pretrained_state_dict:
+            #     pretrained_state_dict = pretrained_state_dict['model']
             logger.info('=> loading pretrained model {}'.format(pretrained))
             print('=> loading pretrained model {} !!!!'.format(pretrained))
 

@@ -4,9 +4,7 @@ import os.path as osp
 import json
 from core.config import cfg 
 
-
 from smplpytorch.pytorch.smpl_layer import SMPL_Layer
-
 
 class SMPL(object):
     def __init__(self):

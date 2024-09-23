@@ -55,7 +55,7 @@ cfg.DATASET.BASE_DATA_DIR = 'data/base_data'
 
 """ Model """
 cfg.MODEL = edict()
-cfg.MODEL.name = ''
+cfg.MODEL.name = 'PMCE'
 cfg.MODEL.hpe_dim = 256
 cfg.MODEL.hpe_dep = 3
 cfg.MODEL.joint_dim = 64
@@ -67,6 +67,7 @@ cfg.MODEL.joint_loss_weight = 1e-3
 cfg.MODEL.shape_loss_weight = 0.06
 cfg.MODEL.pose_loss_weight = 0.06
 cfg.MODEL.posenet_pretrained = False
+cfg.MODEL.posenet_path = './experiment/pretrained/pose_3dpw.pth.tar'
 
 
 """ Train Detail """

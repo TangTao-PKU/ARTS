@@ -1,0 +1,10 @@
+*.pyc
+.vscode
+output
+build
+
+*.jpg
+*.mp4
+*.pth
+
+

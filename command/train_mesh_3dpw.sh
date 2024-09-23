@@ -1,1 +1,1 @@
-python ./main/train.py --cfg ./config/train_mesh_3dpw.yml --gpu 2
+python ./main/train.py --cfg ./config/train_mesh_3dpw.yml --gpu 7

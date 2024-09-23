@@ -1,8 +1,30 @@
+# -*- coding: utf-8 -*-
+
+# Max-Planck-Gesellschaft zur Förderung der Wissenschaften e.V. (MPG) is
+# holder of all proprietary rights on this computer program.
+# You can only use this computer program if you have closed
+# a license agreement with MPG or you get the right to use the computer
+# program from someone who is authorized to grant you that right.
+# Any use of the computer program without a valid license is prohibited and
+# liable to prosecution.
+#
+# Copyright©2019 Max-Planck-Gesellschaft zur Förderung
+# der Wissenschaften e.V. (MPG). acting on behalf of its Max Planck Institute
+# for Intelligent Systems. All rights reserved.
+#
+# Contact: ps-license@tuebingen.mpg.de
+
 import torch
 import numpy as np
 from torch.nn import functional as F
 
 def rodrigues(theta):
+    """Convert axis-angle representation to rotation matrix.
+    Args:
+        theta: size = [B, 3]
+    Returns:
+        Rotation matrix corresponding to the quaternion -- size = [B, 3, 3]
+    """
     l1norm = torch.norm(theta + 1e-8, p = 2, dim = 1)
     angle = torch.unsqueeze(l1norm, -1)
     normalized = torch.div(theta, angle)
@@ -14,6 +36,7 @@ def rodrigues(theta):
 
 
 def batch_rodrigues(axisang):
+    # This function is borrowed from https://github.com/MandyMo/pytorch_HMR/blob/master/src/util.py#L37
     # axisang N x 3
     axisang_norm = torch.norm(axisang + 1e-8, p=2, dim=1)
     angle = torch.unsqueeze(axisang_norm, -1)
@@ -28,6 +51,15 @@ def batch_rodrigues(axisang):
 
 
 def quat2mat(quat):
+    """
+    This function is borrowed from https://github.com/MandyMo/pytorch_HMR/blob/master/src/util.py#L50
+
+    Convert quaternion coefficients to rotation matrix.
+    Args:
+        quat: size = [batch_size, 4] 4 <===>(w, x, y, z)
+    Returns:
+        Rotation matrix corresponding to the quaternion -- size = [batch_size, 3, 3]
+    """
     norm_quat = quat
     norm_quat = norm_quat / norm_quat.norm(p=2, dim=1, keepdim=True)
     w, x, y, z = norm_quat[:, 0], norm_quat[:, 1], norm_quat[:,
@@ -50,6 +82,25 @@ def quat2mat(quat):
 
 
 def rotation_matrix_to_angle_axis(rotation_matrix):
+    """
+    This function is borrowed from https://github.com/kornia/kornia
+
+    Convert 3x4 rotation matrix to Rodrigues vector
+
+    Args:
+        rotation_matrix (Tensor): rotation matrix.
+
+    Returns:
+        Tensor: Rodrigues vector transformation.
+
+    Shape:
+        - Input: :math:`(N, 3, 4)`
+        - Output: :math:`(N, 3)`
+
+    Example:
+        >>> input = torch.rand(2, 3, 4)  # Nx4x4
+        >>> output = tgm.rotation_matrix_to_angle_axis(input)  # Nx3
+    """
     if rotation_matrix.shape[1:] == (3,3):
         rot_mat = rotation_matrix.reshape(-1, 3, 3)
         hom = torch.tensor([0, 0, 1], dtype=torch.float32,
@@ -63,6 +114,27 @@ def rotation_matrix_to_angle_axis(rotation_matrix):
 
 
 def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
+    """
+    This function is borrowed from https://github.com/kornia/kornia
+
+    Convert quaternion vector to angle axis of rotation.
+
+    Adapted from ceres C++ library: ceres-solver/include/ceres/rotation.h
+
+    Args:
+        quaternion (torch.Tensor): tensor with quaternions.
+
+    Return:
+        torch.Tensor: tensor with angle axis of rotation.
+
+    Shape:
+        - Input: :math:`(*, 4)` where `*` means, any number of dimensions
+        - Output: :math:`(*, 3)`
+
+    Example:
+        >>> quaternion = torch.rand(2, 4)  # Nx4
+        >>> angle_axis = tgm.quaternion_to_angle_axis(quaternion)  # Nx3
+    """
     if not torch.is_tensor(quaternion):
         raise TypeError("Input type is not a torch.Tensor. Got {}".format(
             type(quaternion)))
@@ -95,6 +167,28 @@ def quaternion_to_angle_axis(quaternion: torch.Tensor) -> torch.Tensor:
 
 
 def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
+    """
+    This function is borrowed from https://github.com/kornia/kornia
+
+    Convert 3x4 rotation matrix to 4d quaternion vector
+
+    This algorithm is based on algorithm described in
+    https://github.com/KieranWynn/pyquaternion/blob/master/pyquaternion/quaternion.py#L201
+
+    Args:
+        rotation_matrix (Tensor): the rotation matrix to convert.
+
+    Return:
+        Tensor: the rotation in quaternion
+
+    Shape:
+        - Input: :math:`(N, 3, 4)`
+        - Output: :math:`(N, 4)`
+
+    Example:
+        >>> input = torch.rand(4, 3, 4)  # Nx3x4
+        >>> output = tgm.rotation_matrix_to_quaternion(input)  # Nx4
+    """
     if not torch.is_tensor(rotation_matrix):
         raise TypeError("Input type is not a torch.Tensor. Got {}".format(
             type(rotation_matrix)))
@@ -156,6 +250,16 @@ def rotation_matrix_to_quaternion(rotation_matrix, eps=1e-6):
 
 
 def estimate_translation_np(S, joints_2d, joints_conf, focal_length=5000., img_size=224.):
+    """
+    This function is borrowed from https://github.com/nkolot/SPIN/utils/geometry.py
+
+    Find camera translation that brings 3D joints S closest to 2D the corresponding joints_2d.
+    Input:
+        S: (25, 3) 3D joint locations
+        joints: (25, 3) 2D joint locations and confidence
+    Returns:
+        (3,) camera translation vector
+    """
 
     num_joints = S.shape[0]
     # focal length
@@ -190,6 +294,16 @@ def estimate_translation_np(S, joints_2d, joints_conf, focal_length=5000., img_s
 
 
 def estimate_translation(S, joints_2d, focal_length=5000., img_size=224.):
+    """
+    This function is borrowed from https://github.com/nkolot/SPIN/utils/geometry.py
+
+    Find camera translation that brings 3D joints S closest to 2D the corresponding joints_2d.
+    Input:
+        S: (B, 49, 3) 3D joint locations
+        joints: (B, 49, 3) 2D joint locations and confidence
+    Returns:
+        (B, 3) camera translation vectors
+    """
 
     device = S.device
     # Use only joints 25:49 (GT joints)
@@ -208,6 +322,13 @@ def estimate_translation(S, joints_2d, focal_length=5000., img_size=224.):
 
 
 def rot6d_to_rotmat_spin(x):
+    """Convert 6D rotation representation to 3x3 rotation matrix.
+    Based on Zhou et al., "On the Continuity of Rotation Representations in Neural Networks", CVPR 2019
+    Input:
+        (B,6) Batch of 6-D rotation representations
+    Output:
+        (B,3,3) Batch of corresponding rotation matrices
+    """
     x = x.view(-1,3,2)
     a1 = x[:, :, 0]
     a2 = x[:, :, 1]

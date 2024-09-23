@@ -87,6 +87,10 @@ class ShapeCondRealNVP(nn.Module):
         # self.shape_proj = nn.Linear(shape_tot_dim, 64)
         shape_tot_dim2 = shape_tot_dim
         self.shape_proj = nn.Identity()
+        # shape_tot_dim2 = 32
+        # self.shape_proj = nn.Sequential(
+        #     nn.Linear(shape_tot_dim, shape_tot_dim2),
+        #     nn.Dropout())
         self.shape_tot_dim = shape_tot_dim2
 
         self.num_stack = num_stack
@@ -97,6 +101,12 @@ class ShapeCondRealNVP(nn.Module):
             [0, 1] * (jts_tot_dim // 2),
             [1, 0] * (jts_tot_dim // 2)
         ] * (num_stack // 2)).astype(np.float32))
+        # jts_masks = torch.from_numpy(np.array([
+        #     [0, 1] * (jts_tot_dim // 2),
+        #     [1, 0] * (jts_tot_dim // 2),
+        #     [0] * (jts_tot_dim // 2) + [1] * (jts_tot_dim // 2),
+        #     [1] * (jts_tot_dim // 2) + [0] * (jts_tot_dim // 2),
+        # ] * (num_stack // 2)).astype(np.float32))
 
         shape_mask = torch.from_numpy(np.array([
             0, 0, 0, 0
@@ -122,7 +132,11 @@ class ShapeCondRealNVP(nn.Module):
                 use_shape=use_shape,
                 use_act=True)
             for _ in range(self.num_stack)])
-        
+        # self.jts_nets = torch.nn.ModuleList([CondNet(jts_tot_dim, self.shape_tot_dim, use_act=True) for _ in range(self.num_stack)])
+
+        # self.jts_nett = torch.nn.ModuleList([nett(jts_tot_dim) for _ in range(self.num_stack)])
+        # self.jts_nets = torch.nn.ModuleList([nets(jts_tot_dim) for _ in range(self.num_stack)])
+
     def _init(self):
         for m in self.t:
             for mm in m.modules():
@@ -193,4 +207,15 @@ class ShapeCondRealNVP(nn.Module):
         return x
 
     def forward(self, x):
+        # DEVICE = x.device
+        # px = torch.arange(-5, 5, 0.5, device=DEVICE)
+        # py = torch.arange(-5, 5, 0.5, device=DEVICE)
+        # xx, yy = torch.meshgrid(px, py)
+        # samples = torch.stack((xx, yy), dim=2).reshape(-1, 2) + x[:1, :]
+        # prop_q = (0.25 * torch.exp(-torch.abs(samples) / 2))
+        # prop_g = torch.exp(self.log_prob(samples))
+        # prop_q = prop_q[:, 0] * prop_q[:, 1]
+        # prop = (prop_g * prop_q).sum(0).reshape(1, 1, 1) * 0.01 * 0.01
+
+        # return self.log_prob(x) + prop
         return self.log_prob(x)

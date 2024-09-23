@@ -101,13 +101,13 @@ def get_joint_setting(mesh_model, joint_category='coco'):
             (13, 15),  # (5, 6), #(11, 12),
             (17, 11), (17, 12), (17, 18), (18, 5), (18, 6), (18, 0))
         flip_pairs = ((1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16))
-        model_chk_path = './checkpoint/best.pth.tar'
+        model_chk_path = './experiment/exp_03-11_00_11/checkpoint/best.pth.tar'
  
     else:
         raise NotImplementedError(f"{joint_category}: unknown joint set category")
 
     J_regressor = torch.Tensor(joint_regressor)
-    model = models.ARTS.get_model(num_joint=joint_num, embed_dim=256, depth=3) 
+    model = models.PMCE.get_model(num_joint=joint_num, embed_dim=256, depth=3) 
     checkpoint = load_checkpoint(load_dir=model_chk_path)
     model.load_state_dict(checkpoint['model_state_dict'])
 
@@ -199,6 +199,7 @@ def main(args):
         num_frames = len(os.listdir(image_folder))
         # img_shape = cv2.imread(osp.join(image_folder, '000900.jpg')).shape
         img_shape = cv2.imread(osp.join(image_folder, 'image_00000.jpg')).shape
+        # img_shape = cv2.imread(osp.join(image_folder, '00000057.jpg')).shape
         output_path = osp.join('./output/demo_output', os.path.basename(video_file))
         Path(output_path).mkdir(parents=True, exist_ok=True)
         
@@ -206,6 +207,21 @@ def main(args):
     print(f"Input video number of frames {num_frames}\n")
     orig_height, orig_width = img_shape[:2]
 
+    # 视频分帧
+    # input_img_folder = f'{output_path}_input'
+    # os.makedirs(input_img_folder, exist_ok=True)
+    # image_file_names = sorted([
+    #     os.path.join(image_folder, x)
+    #     for x in os.listdir(image_folder)
+    #     if x.endswith('.png') or x.endswith('.jpg')
+    # ])
+
+    # for frame_idx in tqdm(range(len(image_file_names))):
+    #     img_fname = image_file_names[frame_idx]
+    #     img = cv2.imread(img_fname)
+    #     input_img = img.copy()
+    #     cv2.imwrite(os.path.join(input_img_folder, f'{frame_idx:06d}.jpg'), input_img)
+    # return
 
     """ Run tracking """
     bbox_scale = 1.1    #
@@ -235,13 +251,14 @@ def main(args):
     dataset_info = pose_model.cfg.data['test'].get('dataset_info', None)
     if dataset_info is None:
         warnings.warn(
-            'Please set `dataset_info` in the config.',
+            'Please set `dataset_info` in the config.'
+            'Check https://github.com/open-mmlab/mmpose/pull/663 for details.',
             DeprecationWarning)
     else:
         dataset_info = DatasetInfo(dataset_info)
 
 
-    """ Get ARTS model """
+    """ Get PMCE model """
     seq_len = 16
     virtual_crop_size = 500
     joint_set = args.joint_set
@@ -261,9 +278,9 @@ def main(args):
     hmr.load_state_dict(checkpoint['model'], strict=False)
     hmr.eval()
 
-    """ Run ARTS on each person """
+    """ Run PMCE on each person """
     
-    print("\nRunning ARTS on each person tracklet...")
+    print("\nRunning PMCE on each person tracklet...")
     running_results = {}
     for person_id in tqdm(list(tracking_results.keys())):
         bboxes = joints2d = None
@@ -381,13 +398,14 @@ def main(args):
     del model
 
     if args.save_pkl:
-        print(f"Saving output results to \'{os.path.join(output_path, 'ARTS_output.pkl')}\'.")
-        joblib.dump(running_results, os.path.join(output_path, "ARTS_output.pkl"))
+        print(f"Saving output results to \'{os.path.join(output_path, 'pmce_output.pkl')}\'.")
+        joblib.dump(running_results, os.path.join(output_path, "pmce_output.pkl"))
 
     """ Render results as a single video """
     output_img_folder = f'{output_path}_output'
-    input_img_folder = f'{output_path}_input'
     os.makedirs(output_img_folder, exist_ok=True)
+
+    input_img_folder = f'{output_path}_input'
     os.makedirs(input_img_folder, exist_ok=True)
 
     print(f"\nRendering output video, writing frames to {output_img_folder}")
@@ -409,7 +427,8 @@ def main(args):
             img[:] = 0
 
         if args.sideview:
-            side_img = np.zeros_like(img)
+            # side_img = np.zeros_like(img)
+            side_img = img
 
         for person_id, person_data in frame_results[frame_idx].items():
             frame_verts = person_data['verts']
@@ -427,8 +446,10 @@ def main(args):
             img = render(frame_verts, frame_cam, frame_bbox, orig_height, orig_width, img, mesh_model.face, mc, mesh_filename)
 
             if args.sideview:
-                side_img = render(frame_verts, frame_cam, frame_bbox, orig_height, orig_width, 
-                    side_img, mesh_model.face, color=mc, angle=270, axis=[0,1,0])
+                # side_img = render(frame_verts, frame_cam, frame_bbox, orig_height, orig_width, 
+                #     side_img, mesh_model.face, color=mc, angle=270, axis=[0,1,0])
+                img = input_img
+                side_img = render(frame_verts, frame_cam, frame_bbox, orig_height, orig_width, img, mesh_model.face, mc, mesh_filename)
 
         if args.sideview:
             img = np.concatenate([img, side_img], axis=1)
@@ -447,16 +468,23 @@ def main(args):
 
     """ Save rendered video """
     vid_name = os.path.basename(video_file)
-    save_name = f'ARTS_{vid_name.replace(".mp4", "")}_output.mp4'
+    save_name = f'pmce_{vid_name.replace(".mp4", "")}_output.mp4'
     save_path = os.path.join(output_path, save_name)
 
     images_to_video(img_folder=output_img_folder, output_vid_file=save_path)
+    # images_to_video(img_folder=input_img_folder, output_vid_file=os.path.join(output_path, vid_name))
     print(f"Saving result video to {os.path.abspath(save_path)}")
-    shutil.rmtree(input_img_folder)   
+    # shutil.rmtree(output_img_folder)
+    # shutil.rmtree(input_img_folder)
+    # if args.vid_file != 'None':
+    #     shutil.rmtree(image_folder)    
 
 
 if __name__ == '__main__':
-
+    """
+    python ./main/run_demo.py --vid_file demo/sample_video.mp4 --gpu 1
+    python ./main/run_demo.py --img_file /data-home/tangt/models/PMCE/data/3DPW-demo/imageFiles/downtown_arguing_00 --gpu 1
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--vid_file', type=str, default='None', help='input video path or youtube link')

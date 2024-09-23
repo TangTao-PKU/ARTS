@@ -1,4 +1,5 @@
-
+# Some functions are borrowed from https://github.com/akanazawa/human_dynamics/blob/master/src/evaluation/eval_util.py
+# Adhere to their licence to use these functions
 from pathlib import Path
 
 import torch
@@ -7,6 +8,13 @@ from matplotlib import pyplot as plt
 
 
 def compute_accel(joints):
+    """
+    Computes acceleration of 3D joints.
+    Args:
+        joints (Nx25x3).
+    Returns:
+        Accelerations (N-2).
+    """
     velocities = joints[1:] - joints[:-1]
     acceleration = velocities[1:] - velocities[:-1]
     acceleration_normed = np.linalg.norm(acceleration, axis=2)
@@ -14,6 +22,18 @@ def compute_accel(joints):
 
 
 def compute_error_accel(joints_gt, joints_pred, vis=None):
+    """
+    Computes acceleration error:
+        1/(n-2) \sum_{i=1}^{n-1} X_{i-1} - 2X_i + X_{i+1}
+    Note that for each frame that is not visible, three entries in the
+    acceleration error should be zero'd out.
+    Args:
+        joints_gt (Nx14x3).
+        joints_pred (Nx14x3).
+        vis (N).
+    Returns:
+        error_accel (N-2).
+    """
     # (N-2)x14x3
     accel_gt = joints_gt[:-2] - 2 * joints_gt[1:-1] + joints_gt[2:]
     accel_pred = joints_pred[:-2] - 2 * joints_pred[1:-1] + joints_pred[2:]
@@ -33,6 +53,14 @@ def compute_error_accel(joints_gt, joints_pred, vis=None):
 
 
 def compute_error_verts(pred_verts, target_verts=None, target_theta=None):
+    """
+    Computes MPJPE over 6890 surface vertices.
+    Args:
+        verts_gt (Nx6890x3).
+        verts_pred (Nx6890x3).
+    Returns:
+        error_verts (N).
+    """
 
     if target_verts is None:
         from lib.models.smpl import SMPL_MODEL_DIR
@@ -62,6 +90,12 @@ def compute_error_verts(pred_verts, target_verts=None, target_theta=None):
 
 
 def compute_similarity_transform(S1, S2):
+    '''
+    Computes a similarity transform (sR, t) that takes
+    a set of 3D points S1 (3 x N) closest to a set of 3D points S2,
+    where R is an 3x3 rotation matrix, t 3x1 translation, s scale.
+    i.e. solves the orthogonal Procrutes problem.
+    '''
     transposed = False
     if S1.shape[0] != 3 and S1.shape[0] != 2:
         S1 = S1.T
@@ -107,6 +141,12 @@ def compute_similarity_transform(S1, S2):
 
 
 def compute_similarity_transform_torch(S1, S2):
+    '''
+    Computes a similarity transform (sR, t) that takes
+    a set of 3D points S1 (3 x N) closest to a set of 3D points S2,
+    where R is an 3x3 rotation matrix, t 3x1 translation, s scale.
+    i.e. solves the orthogonal Procrutes problem.
+    '''
     transposed = False
     if S1.shape[0] != 3 and S1.shape[0] != 2:
         S1 = S1.T
@@ -151,6 +191,12 @@ def compute_similarity_transform_torch(S1, S2):
 
 
 def batch_compute_similarity_transform_torch(S1, S2):
+    '''
+    Computes a similarity transform (sR, t) that takes
+    a set of 3D points S1 (3 x N) closest to a set of 3D points S2,
+    where R is an 3x3 rotation matrix, t 3x1 translation, s scale.
+    i.e. solves the orthogonal Procrutes problem.
+    '''
     transposed = False
     if S1.shape[0] != 3 and S1.shape[0] != 2:
         S1 = S1.permute(0,2,1)
@@ -199,6 +245,11 @@ def batch_compute_similarity_transform_torch(S1, S2):
 
 
 def align_by_pelvis(joints):
+    """
+    Assumes joints is 14 x 3 in LSP order.
+    Then hips are: [3, 2]
+    Takes mid point of these points, then subtracts it.
+    """
 
     left_id = 2
     right_id = 3
@@ -208,6 +259,13 @@ def align_by_pelvis(joints):
 
 
 def compute_errors(gt3ds, preds):
+    """
+    Gets MPJPE after pelvis alignment + MPJPE after Procrustes.
+    Evaluates on the 14 common joints.
+    Inputs:
+      - gt3ds: N x 14 x 3
+      - preds: N x 14 x 3
+    """
     errors, errors_pa = [], []
     for i, (gt3d, pred) in enumerate(zip(gt3ds, preds)):
         gt3d = gt3d.reshape(-1, 3)

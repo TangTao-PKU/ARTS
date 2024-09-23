@@ -60,7 +60,16 @@ class SMPL_layer(nn.Module):
                  gender='neutral',
                  dtype=torch.float32,
                  num_joints=29):
+        ''' SMPL model layers
 
+        Parameters:
+        ----------
+        model_path: str
+            The path to the folder or to the file where the model
+            parameters are stored
+        gender: str, optional
+            Which gender to load
+        '''
         super(SMPL_layer, self).__init__()
 
         self.ROOT_IDX = self.JOINT_NAMES.index('pelvis')
@@ -77,6 +86,7 @@ class SMPL_layer(nn.Module):
 
         self.faces = self.smpl_data.f
 
+        ''' Register Buffer '''
         # Faces
         self.register_buffer('faces_tensor',
                              to_tensor(to_np(self.smpl_data.f, dtype=np.int64), dtype=torch.long))
@@ -156,6 +166,30 @@ class SMPL_layer(nn.Module):
                 return_29_jts=False,
                 pose2rot=True,
                 return_verts=True):
+        ''' Forward pass for the SMPL model
+
+            Parameters
+            ----------
+            pose_axis_angle: torch.tensor, optional, shape Bx(J*3)
+                It should be a tensor that contains joint rotations in
+                axis-angle format. (default=None)
+            betas: torch.tensor, optional, shape Bx10
+                It can used if shape parameters
+                `betas` are predicted from some external model.
+                (default=None)
+            global_orient: torch.tensor, optional, shape Bx3
+                Global Orientations.
+            transl: torch.tensor, optional, shape Bx3
+                Global Translations.
+            return_verts: bool, optional
+                Return the vertices. (default=True)
+
+            Returns
+            -------
+        '''
+        # batch_size = pose_axis_angle.shape[0]
+
+        # concate root orientation with thetas
         if global_orient is not None:
             full_pose = torch.cat([global_orient, pose_axis_angle], dim=1)
         else:
@@ -175,6 +209,10 @@ class SMPL_layer(nn.Module):
             joints += transl.unsqueeze(dim=1)
             vertices += transl.unsqueeze(dim=1)
             joints_from_verts_h36m += transl.unsqueeze(dim=1)
+        # else:
+        #     vertices = vertices - joints[:, self.root_idx_smpl, :].unsqueeze(1).detach()
+        #     joints = joints - joints[:, self.root_idx_smpl, :].unsqueeze(1).detach()
+        #     joints_from_verts_h36m = joints_from_verts_h36m - joints_from_verts_h36m[:, self.root_idx_17, :].unsqueeze(1).detach()
 
         output = edict(
             vertices=vertices, joints=joints, rot_mats=rot_mats, joints_from_verts=joints_from_verts_h36m)
@@ -189,7 +227,27 @@ class SMPL_layer(nn.Module):
                return_verts=True,
                return_29_jts=False,
                leaf_thetas=None):
+        ''' Inverse pass for the SMPL model
 
+            Parameters
+            ----------
+            pose_skeleton: torch.tensor, optional, shape Bx(J*3)
+                It should be a tensor that contains joint locations in
+                (X, Y, Z) format. (default=None)
+            betas: torch.tensor, optional, shape Bx10
+                It can used if shape parameters
+                `betas` are predicted from some external model.
+                (default=None)
+            global_orient: torch.tensor, optional, shape Bx3
+                Global Orientations.
+            transl: torch.tensor, optional, shape Bx3
+                Global Translations.
+            return_verts: bool, optional
+                Return the vertices. (default=True)
+
+            Returns
+            -------
+        '''
         batch_size = pose_skeleton.shape[0]
 
         if leaf_thetas is not None:
@@ -212,6 +270,10 @@ class SMPL_layer(nn.Module):
             new_joints += transl.unsqueeze(dim=1)
             vertices += transl.unsqueeze(dim=1)
             joints_from_verts += transl.unsqueeze(dim=1)
+        # else:
+        #     vertices = vertices - new_joints[:, self.root_idx_smpl, :].unsqueeze(1).detach()
+        #     new_joints = new_joints - new_joints[:, self.root_idx_smpl, :].unsqueeze(1).detach()
+        #     joints_from_verts = joints_from_verts - joints_from_verts[:, self.root_idx_17, :].unsqueeze(1).detach()
 
         output = edict(
             vertices=vertices, joints=new_joints, rot_mats=rot_mats, joints_from_verts=joints_from_verts)

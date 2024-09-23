@@ -108,6 +108,8 @@ class  GraphormerNet(nn.Module):
 
     def forward(self, x, img_feat):
         b, t, j, c = x.shape
+        # sh torch.Size([64, 16, 16, 2])
+        # import pdb; pdb.set_trace()
         x = self.SpaTemHead(x, img_feat) # bj t c
         y = x
         
@@ -135,9 +137,12 @@ class  GraphormerNet(nn.Module):
         x = rearrange(x, '(b j) t c -> b t j c', j=j)
         x = self.regression(x) # (b t (j * 3))
         x = x.view(b, t, j, -1)
+        # xout = self.fusion(x)
+        # xout = xout.squeeze(1)
         return x
 
 
 def get_model(num_joint=16, embed_dim=256, depth=3, pretrained=False): 
+    # num_joint = 16
     model = GraphormerNet(num_frames=cfg.DATASET.seqlen, num_joints=num_joint, embed_dim=embed_dim, depth=depth, pretrained=pretrained)
     return model
