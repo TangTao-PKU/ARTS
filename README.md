@@ -10,7 +10,7 @@ The project has undergone complete anonymization for reviewers to understand som
 
 ## To-Do List
 
-* [ ] Upload latest code and data processing.
+* [X] Upload latest code and data processing.
 * [ ] Release all checkpoints.
 
 ## Preparation
