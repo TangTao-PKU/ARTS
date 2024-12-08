@@ -5,13 +5,10 @@
 </div>
 This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos"
 
-## Statement
-The project has undergone complete anonymization for reviewers to understand some implementation details that they may be interested in. However, due to the need for anonymization, dataset preparation and processing are unavailable yet and these will be fully open-sourced in subsequent rebuttals or after paper acceptance.
 
 ## To-Do List
 
-* [X] Upload latest code and data processing.
-* [ ] Release all checkpoints.
+* [X] Upload latest code and data preparation.
 
 ## Preparation
 
