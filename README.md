@@ -1,17 +1,24 @@
 # ARTS
+This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos"
 <div align="center">
 
   <h1 align="center">ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos (ACM MM 2024)</h1>
 </div>
-This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos"
-
-## Statement
-The project has undergone complete anonymization for reviewers to understand some implementation details that they may be interested in. However, due to the need for anonymization, dataset preparation and processing are unavailable yet and these will be fully open-sourced in subsequent rebuttals or after paper acceptance.
+<h4 align="center" style="text-decoration: none;">
+  <a href="https://github.com/TangTao-PKU", target="_blank"><b>Tao Tang</b></a>,
+  <a href="https://scholar.google.com/citations?hl=zh-CN&user=4CQKG8oAAAAJ", target="_blank"><b>Hong Liu</b></a>,
+  <a href="https://TangTao-PKU.github.io/", target="_blank"><b>Yingxuan You</b></a>,
+  <a href="https://scholar.google.com/citations?user=PjBAErYAAAAJ&hl=zh-CN&oi=sra", target="_blank"><b>Ti Wang</b></a>,
+  <a href="https://vegetebird.github.io/", target="_blank"><b>Wenhao Li</b></a>,
+</h4>
+<h4 align="center">
+  <a href="https://arxiv.org/pdf/2410.15582", target="_blank">arXiv</a> /
+  <a href="https://dl.acm.org/doi/abs/10.1145/3664647.3680881", target="_blank">paper</a> /
+</h4>
 
 ## To-Do List
 
-* [ ] Upload latest code and data processing.
-* [ ] Release all checkpoints.
+* [X] Upload latest code and data preparation.
 
 ## Preparation
 
@@ -33,7 +40,7 @@ sh requirements.sh
 
 ## Implementation
 ### Data Preparation
-The `./data` directory structure should follow the below hierarchy. All the processed annotation files will be available.
+The `./data` directory structure should follow the below hierarchy. Download all the processed annotation files from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_XgVf-q5qKdkalhgOj?e=LmGZ8n)
 ```
 ${Project}  
 |-- data  
@@ -111,5 +118,21 @@ bash test_mesh_3dpw.sh
 bash test_mesh_mpii3d.sh
 ```
 Change the `weight_path` in the corresponding `./config/test_*.yml` to your model path.
+
+## Citation
+Cite as below if you find this repository is helpful to your project:
+```bibtex
+@inproceedings{tang2024arts,
+  title={ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos},
+  author={Tang, Tao and Liu, Hong and You, Yingxuan and Wang, Ti and Li, Wenhao},
+  booktitle={Proceedings of the 32nd ACM International Conference on Multimedia},
+  pages={1514--1523},
+  year={2024}
+}
+```
+
+
+## Acknowledgement
+This repo is extended from the excellent work [ARTS](https://github.com/TangTao-PKU/ARTS), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
 
 

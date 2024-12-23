@@ -1,1 +1,0 @@
-from .dataset import MPII3D as dataset

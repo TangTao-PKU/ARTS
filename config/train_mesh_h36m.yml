@@ -9,7 +9,7 @@ DATASET:
     stride: 1
 
 MODEL:
-    name: 'PMCE'
+    name: 'ARTS'
     hpe_dim: 256
     hpe_dep: 3
     joint_dim: 64

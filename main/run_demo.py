@@ -107,7 +107,7 @@ def get_joint_setting(mesh_model, joint_category='coco'):
         raise NotImplementedError(f"{joint_category}: unknown joint set category")
 
     J_regressor = torch.Tensor(joint_regressor)
-    model = models.PMCE.get_model(num_joint=joint_num, embed_dim=256, depth=3) 
+    model = models.ARTS.get_model(num_joint=joint_num, embed_dim=256, depth=3) 
     checkpoint = load_checkpoint(load_dir=model_chk_path)
     model.load_state_dict(checkpoint['model_state_dict'])
 
@@ -258,7 +258,7 @@ def main(args):
         dataset_info = DatasetInfo(dataset_info)
 
 
-    """ Get PMCE model """
+    """ Get ARTS model """
     seq_len = 16
     virtual_crop_size = 500
     joint_set = args.joint_set
@@ -278,9 +278,9 @@ def main(args):
     hmr.load_state_dict(checkpoint['model'], strict=False)
     hmr.eval()
 
-    """ Run PMCE on each person """
+    """ Run ARTS on each person """
     
-    print("\nRunning PMCE on each person tracklet...")
+    print("\nRunning ARTS on each person tracklet...")
     running_results = {}
     for person_id in tqdm(list(tracking_results.keys())):
         bboxes = joints2d = None
@@ -398,8 +398,8 @@ def main(args):
     del model
 
     if args.save_pkl:
-        print(f"Saving output results to \'{os.path.join(output_path, 'pmce_output.pkl')}\'.")
-        joblib.dump(running_results, os.path.join(output_path, "pmce_output.pkl"))
+        print(f"Saving output results to \'{os.path.join(output_path, 'ARTS_output.pkl')}\'.")
+        joblib.dump(running_results, os.path.join(output_path, "ARTS_output.pkl"))
 
     """ Render results as a single video """
     output_img_folder = f'{output_path}_output'
@@ -468,7 +468,7 @@ def main(args):
 
     """ Save rendered video """
     vid_name = os.path.basename(video_file)
-    save_name = f'pmce_{vid_name.replace(".mp4", "")}_output.mp4'
+    save_name = f'ARTS_{vid_name.replace(".mp4", "")}_output.mp4'
     save_path = os.path.join(output_path, save_name)
 
     images_to_video(img_folder=output_img_folder, output_vid_file=save_path)
@@ -483,7 +483,7 @@ def main(args):
 if __name__ == '__main__':
     """
     python ./main/run_demo.py --vid_file demo/sample_video.mp4 --gpu 1
-    python ./main/run_demo.py --img_file /data-home/tangt/models/PMCE/data/3DPW-demo/imageFiles/downtown_arguing_00 --gpu 1
+    python ./main/run_demo.py --img_file /data-home/tangt/models/ARTS/data/3DPW-demo/imageFiles/downtown_arguing_00 --gpu 1
     """
     parser = argparse.ArgumentParser()
 

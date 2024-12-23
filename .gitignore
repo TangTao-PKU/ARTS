@@ -14,3 +14,6 @@ smplpytorch/
 ./ViTpose
 ./mmcv
 experiment/
+data/
+data_final/
+output/
