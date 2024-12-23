@@ -7,8 +7,6 @@ This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical 
 <h4 align="center" style="text-decoration: none;">
   <a href="https://github.com/TangTao-PKU", target="_blank"><b>Tao Tang</b></a>,
   <a href="https://scholar.google.com/citations?hl=zh-CN&user=4CQKG8oAAAAJ", target="_blank"><b>Hong Liu</b></a>,
-  <a href="https://TangTao-PKU.github.io/", target="_blank"><b>Yingxuan You</b></a>,
-=======
   <a href="https://kasvii.github.io/", target="_blank"><b>Yingxuan You</b></a>,
   <a href="https://scholar.google.com/citations?user=PjBAErYAAAAJ&hl=zh-CN&oi=sra", target="_blank"><b>Ti Wang</b></a>,
   <a href="https://vegetebird.github.io/", target="_blank"><b>Wenhao Li</b></a>,
