@@ -1,1 +1,1 @@
-python ./main/train.py --cfg ./config/train_pose_3dpw.yml --gpu 7
+python ./main/train.py --cfg ./config/train_pose_3dpw.yml --gpu 2
