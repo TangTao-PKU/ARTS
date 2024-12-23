@@ -133,6 +133,6 @@ Cite as below if you find this repository is helpful to your project:
 
 
 ## Acknowledgement
-This repo is extended from the excellent work [PMCE](https://github.com/kasvii/PMCE), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
+This repo is extended from the excellent work [ARTS](https://github.com/kasvii/ARTS), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
 
 

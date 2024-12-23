@@ -88,7 +88,7 @@ class FlowRegressor(nn.Module):
         super(FlowRegressor, self).__init__()
         self.num_joints = num_joints
 
-        h36m_jregressor = np.load('./J_regressor_h36m.npy')
+        h36m_jregressor = np.load('./data/base_data/J_regressor_h36m.npy')
         self.smpl_layer = SMPL_layer(
             './data/base_data/SMPL_NEUTRAL.pkl',
             h36m_jregressor=h36m_jregressor,
