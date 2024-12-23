@@ -5,9 +5,9 @@ This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical 
   <h1 align="center">ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos (ACM MM 2024)</h1>
 </div>
 <h4 align="center" style="text-decoration: none;">
-  <a href="[https://vegetebird.github.io/](https://github.com/TangTao-PKU)", target="_blank"><b>Wenhao Li</b></a>,
+  <a href="https://github.com/TangTao-PKU", target="_blank"><b>Tao Tang</b></a>,
   <a href="https://scholar.google.com/citations?hl=zh-CN&user=4CQKG8oAAAAJ", target="_blank"><b>Hong Liu</b></a>,
-  <a href="[https://kasvii.github.io/](https://scholar.google.com/citations?hl=zh-CN&user=T2e15wkAAAAJ)", target="_blank"><b>Yingxuan You</b></a>,
+  <a href="https://kasvii.github.io/", target="_blank"><b>Yingxuan You</b></a>,
   <a href="https://scholar.google.com/citations?user=PjBAErYAAAAJ&hl=zh-CN&oi=sra", target="_blank"><b>Ti Wang</b></a>,
   <a href="https://vegetebird.github.io/", target="_blank"><b>Wenhao Li</b></a>,
 </h4>
