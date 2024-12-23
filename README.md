@@ -30,7 +30,7 @@ sh requirements.sh
 
 ## Implementation
 ### Data Preparation
-The `./data` directory structure should follow the below hierarchy. All the processed annotation files will be available.
+The `./data` directory structure should follow the below hierarchy. Download all the processed annotation files from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_XgVf-q5qKdkalhgOj?e=LmGZ8n)
 ```
 ${Project}  
 |-- data  
@@ -108,5 +108,21 @@ bash test_mesh_3dpw.sh
 bash test_mesh_mpii3d.sh
 ```
 Change the `weight_path` in the corresponding `./config/test_*.yml` to your model path.
+
+## Citation
+Cite as below if you find this repository is helpful to your project:
+```bibtex
+@inproceedings{tang2024arts,
+  title={ARTS: Semi-Analytical Regressor using Disentangled Skeletal Representations for Human Mesh Recovery from Videos},
+  author={Tang, Tao and Liu, Hong and You, Yingxuan and Wang, Ti and Li, Wenhao},
+  booktitle={Proceedings of the 32nd ACM International Conference on Multimedia},
+  pages={1514--1523},
+  year={2024}
+}
+```
+
+
+## Acknowledgement
+This repo is extended from the excellent work [PMCE](https://github.com/kasvii/PMCE), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
 
 
