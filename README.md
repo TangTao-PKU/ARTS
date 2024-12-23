@@ -7,17 +7,15 @@ This is the offical Pytorch implementation of the paper: "ARTS: Semi-Analytical 
 <h4 align="center" style="text-decoration: none;">
   <a href="https://github.com/TangTao-PKU", target="_blank"><b>Tao Tang</b></a>,
   <a href="https://scholar.google.com/citations?hl=zh-CN&user=4CQKG8oAAAAJ", target="_blank"><b>Hong Liu</b></a>,
-<<<<<<< HEAD
   <a href="https://TangTao-PKU.github.io/", target="_blank"><b>Yingxuan You</b></a>,
 =======
   <a href="https://kasvii.github.io/", target="_blank"><b>Yingxuan You</b></a>,
->>>>>>> 639eee32b785ea5e2d305cda5da36b16e31c2568
   <a href="https://scholar.google.com/citations?user=PjBAErYAAAAJ&hl=zh-CN&oi=sra", target="_blank"><b>Ti Wang</b></a>,
   <a href="https://vegetebird.github.io/", target="_blank"><b>Wenhao Li</b></a>,
 </h4>
 <h4 align="center">
   <a href="https://arxiv.org/pdf/2410.15582", target="_blank">arXiv</a> /
-  <a href="https://dl.acm.org/doi/abs/10.1145/3664647.3680881", target="_blank">paper</a> /
+  <a href="https://dl.acm.org/doi/abs/10.1145/3664647.3680881", target="_blank">paper</a> 
 </h4>
 
 ## To-Do List
@@ -137,10 +135,6 @@ Cite as below if you find this repository is helpful to your project:
 
 
 ## Acknowledgement
-<<<<<<< HEAD
-This repo is extended from the excellent work [ARTS](https://github.com/TangTao-PKU/ARTS), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
-=======
 This repo is extended from the excellent work [PMCE](https://github.com/kasvii/PMCE), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
->>>>>>> 639eee32b785ea5e2d305cda5da36b16e31c2568
 
 
