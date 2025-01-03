@@ -40,7 +40,7 @@ sh requirements.sh
 
 ## Implementation
 ### Data Preparation
-The `./data` directory structure should follow the below hierarchy. Download all the processed annotation files from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_XgVf-q5qKdkalhgOj?e=LmGZ8n)
+Rename the `./data_final` to the `./data`. And the `./data` directory structure should follow the below hierarchy. Download all the processed annotation files from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_XgVf-q5qKdkalhgOj?e=LmGZ8n)
 ```
 ${Project}  
 |-- data  
