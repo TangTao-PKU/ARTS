@@ -1,4 +1,3 @@
-# ARTS
 This is the offical Pytorch implementation of the paper:"
 <div align="center">
 
