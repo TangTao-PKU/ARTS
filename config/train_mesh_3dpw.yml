@@ -1,7 +1,7 @@
 DATASET:
-    # train_list: ['PW3D', 'MPII3D', 'Human36M', 'COCO', 'MPII']
-    train_list: ['PW3D', 'MPII3D', 'Human36M']
-    #train_list: ['PW3D']
+    train_list: ['PW3D', 'MPII3D', 'Human36M', 'COCO', 'MPII']
+    # train_list: ['PW3D', 'MPII3D', 'Human36M']
+    # train_list: ['PW3D']
     test_list: ['PW3D']
     input_joint_set: 'coco'
     target_joint_set: 'human36'

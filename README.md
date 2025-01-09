@@ -1,4 +1,3 @@
-# ARTS
 This is the offical Pytorch implementation of the paper:"
 <div align="center">
 
@@ -16,9 +15,17 @@ This is the offical Pytorch implementation of the paper:"
   <a href="https://dl.acm.org/doi/abs/10.1145/3664647.3680881", target="_blank">paper</a> 
 </h4>
 
-## To-Do List
+<p align="center">
+    <img src="assets/ARTS_overview.jpg" /> 
+</p>
 
-* [X] Upload latest code and data preparation.
+<p align="center">
+  <img src="assets/arts_demo1.gif" height="105" /> 
+  <img src="assets/arts_demo2.gif" height="105" /> 
+  <img src="assets/arts_demo3.gif" height="105" /> 
+  <img src="assets/arts_demo4.gif" height="105" /> 
+</p>
+
 
 ## Preparation
 
@@ -40,7 +47,7 @@ sh requirements.sh
 
 ## Implementation
 ### Data Preparation
-The `./data` directory structure should follow the below hierarchy. Download all the processed annotation files from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_XgVf-q5qKdkalhgOj?e=LmGZ8n)
+Rename the `./data_final` to the `./data`. And the `./data` directory structure should follow the below hierarchy. Download all the processed annotation files from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_XgVf-q5qKdkalhgOj?e=LmGZ8n)
 ```
 ${Project}  
 |-- data  
@@ -133,6 +140,6 @@ Cite as below if you find this repository is helpful to your project:
 
 
 ## Acknowledgement
-This repo is extended from the excellent work [ARTS](https://github.com/kasvii/ARTS), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
+This repo is extended from the excellent work [PMCE](https://github.com/kasvii/PMCE), [Pose2Mesh](https://github.com/hongsukchoi/Pose2Mesh_RELEASE), [TCMR](https://github.com/hongsukchoi/TCMR_RELEASE). We thank the authors for releasing the codes.
 
 
