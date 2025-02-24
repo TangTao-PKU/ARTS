@@ -254,54 +254,55 @@ class Pose2Mesh(nn.Module):
         # torch.Size([30, 16, 19, 3])
         joints_seq = joints
 
-        # 1: Motion-centric Cross-attention
+        # 1: Motion-Centric Refinement
         # motion torch.Size([30, 15, 19, 3])
         motion = joints_seq[:,1:] - joints_seq[:,:-1]
         mean_motion = torch.mean(motion, dim=1,keepdim=True)
         motion = torch.cat([mean_motion, motion], dim=1)
         
-        img_feats_trans = self.proj(img_feats)              # B 16 512
+        img_feats_trans = self.proj(img_feats)                                              # B 16 512
         joints_seq_trans = self.projoint(motion.view(batch_size, cfg.DATASET.seqlen, -1))
         
-        img_feats_cross = self.mcca(joints_seq_trans, img_feats_trans, img_feats_trans)  # B 16 512
-        img_feats_trans = self.out_proj(img_feats_cross)   # B 16 2048
+        img_feats_cross = self.mcca(joints_seq_trans, img_feats_trans, img_feats_trans)     # B 16 512
+        img_feats_trans = self.out_proj(img_feats_cross)                                    # B 16 2048
 
-        # 2: Joint-guided Pose Init
+        # 2: Temporal Inverse Kinematics
         output_pose2SMPL = self.TIK(joints_seq, img_feats_trans)
         inv_pred2rot6d = output_pose2SMPL['inv_pred2rot6d'].reshape(batch_size, cfg.DATASET.seqlen, -1)
 
+        # 3: Bone-Guided Shape Fitting
         if cfg.DATASET.input_joint_set == 'coco':
-            pred_mean_bones = torch.zeros((batch_size, len(self.coco_skeleton))).cuda()   # torch.Size([32, 19])
+            pred_mean_bones = torch.zeros((batch_size, len(self.coco_skeleton))).cuda()         # torch.Size([32, 19])
             index = 0
             mean_pose = (self.joint_regressor_coco @ self.SMPL_mean_mesh)
             mean_pose = self.add_pelvis_and_neck(mean_pose)
             mean_pose = mean_pose[None,:,:].repeat(batch_size, axis=0)
-            mean_pose = torch.tensor(mean_pose).cuda()                                     # torch.Size([32, 19, 3])
+            mean_pose = torch.tensor(mean_pose).cuda()                                          # torch.Size([32, 19, 3])
             skeleten = self.coco_skeleton
         else:
-            pred_mean_bones = torch.zeros((batch_size, len(self.human36_skeleton))).cuda()   # torch.Size([32, 17])
+            pred_mean_bones = torch.zeros((batch_size, len(self.human36_skeleton))).cuda()      # torch.Size([32, 17])
             index = 0
             mean_pose = (self.joint_regressor_human36 @ self.SMPL_mean_mesh)
             mean_pose = mean_pose[None,:,:].repeat(batch_size, 1,1)
-            mean_pose = torch.tensor(mean_pose).cuda()                                     # torch.Size([32, 17, 3])
+            mean_pose = torch.tensor(mean_pose).cuda()                                          # torch.Size([32, 17, 3])
             skeleten = self.human36_skeleton
 
         for (joint0, joint1) in skeleten:
-            diff_vector = mean_pose[:, joint1] - mean_pose[:, joint0]                   # torch.Size([32, 3])
+            diff_vector = mean_pose[:, joint1] - mean_pose[:, joint0]                           # torch.Size([32, 3])
             vector_bone_length = torch.sqrt(diff_vector[:,0]**2 + diff_vector[:,1]**2 + diff_vector[:,2]**2)        # torch.Size([32])
 
-            distance = joints_seq[:,:,joint0] - joints_seq[:,:, joint1]                 # torch.Size([32, 16, 3])
+            distance = joints_seq[:,:,joint0] - joints_seq[:,:, joint1]                                 # torch.Size([32, 16, 3])
             bone_length = torch.sqrt(distance[:,:,0]**2 + distance[:,:,1]**2 + distance[:,:,2]**2)      # torch.Size([32, 16])
-            mean_bone_length = torch.mean(bone_length, dim=1)                           # torch.Size([32])
+            mean_bone_length = torch.mean(bone_length, dim=1)                                           # torch.Size([32])
             pred_mean_bones[:,index] = mean_bone_length
-            scaled_diff_vector = mean_bone_length.unsqueeze(1) * diff_vector            # torch.Size([32, 3])
+            scaled_diff_vector = mean_bone_length.unsqueeze(1) * diff_vector                            # torch.Size([32, 3])
 
             mean_pose[:, joint1] += (mean_bone_length / vector_bone_length - 1.).unsqueeze(1) * scaled_diff_vector
             index += 1
 
-        mean_pose = mean_pose[:, :17].transpose(1,2)                            # torch.Size([32, 17, 3])
+        mean_pose = mean_pose[:, :17].transpose(1,2)                                                # torch.Size([32, 17, 3])
         inv_bone2mesh = self.inv_b2m(mean_pose).transpose(1,2)
-        inv_bone2mesh = inv_bone2mesh - self.SMPL_mean_mesh.unsqueeze(0).to(torch.float).cuda()  # torch.Size([32, 6890, 3])
+        inv_bone2mesh = inv_bone2mesh - self.SMPL_mean_mesh.unsqueeze(0).to(torch.float).cuda()     # torch.Size([32, 6890, 3])
         inv_bone2mesh = inv_bone2mesh.reshape(batch_size, -1)
         inv_mesh2shape = self.inv_m2s(inv_bone2mesh)
         inv_mesh2shape = inv_mesh2shape[:, None, :]
@@ -315,7 +316,7 @@ class Pose2Mesh(nn.Module):
         residual_joint, residual_mesh = self.residual(joints[:,cfg.DATASET.seqlen // 2], img_feats[:,cfg.DATASET.seqlen // 2])
         smpl_vertices_mid = 0.5 * smpl_vertices_mid + 0.5 * residual_mesh
 
-        return residual_joint, inv_pred2rot6d, inv_mesh2shape, smpl_vertices_mid, output  # B x 6890 x 3
+        return residual_joint, inv_pred2rot6d, inv_mesh2shape, smpl_vertices_mid, output            # B x 6890 x 3
 
 def get_model(num_joint, embed_dim):
     model = Pose2Mesh(num_joint, embed_dim)
