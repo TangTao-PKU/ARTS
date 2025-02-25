@@ -1,5 +1,5 @@
 import os, sys
-sys.path.append('/data0/tangt/models/ARTS/lib')
+sys.path.append('/data3/tangt/models/ARTS/lib')
 import argparse
 from core.config import cfg, update_config
 
@@ -41,19 +41,19 @@ torch.backends.cudnn.benchmark = False
 torch.backends.cudnn.deterministic = True
 
 output_model_dir = os.path.join(cfg.checkpoint_dir, 'SemiAnalytical.py')
-shutil.copyfile(src='/data0/tangt/models/ARTS/lib/models/SemiAnalytical.py', dst=output_model_dir)
+shutil.copyfile(src='/data3/tangt/models/ARTS/lib/models/SemiAnalytical.py', dst=output_model_dir)
 
 output_model_dir = os.path.join(cfg.checkpoint_dir, 'PoseEstimation.py')
-shutil.copyfile(src='/data0/tangt/models/ARTS/lib/models/PoseEstimation.py', dst=output_model_dir)
+shutil.copyfile(src='/data3/tangt/models/ARTS/lib/models/PoseEstimation.py', dst=output_model_dir)
 
 output_model_dir = os.path.join(cfg.checkpoint_dir, 'TIK.py')
-shutil.copyfile(src='/data0/tangt/models/ARTS/lib/models/TIK.py', dst=output_model_dir)
+shutil.copyfile(src='/data3/tangt/models/ARTS/lib/models/TIK.py', dst=output_model_dir)
 
 output_model_dir = os.path.join(cfg.checkpoint_dir, 'ARTS.py')
-shutil.copyfile(src='/data0/tangt/models/ARTS/lib/models/ARTS.py', dst=output_model_dir)
+shutil.copyfile(src='/data3/tangt/models/ARTS/lib/models/ARTS.py', dst=output_model_dir)
 
 output_model_dir = os.path.join(cfg.checkpoint_dir, 'base.py')
-shutil.copyfile(src='/data0/tangt/models/ARTS/lib/core/base.py', dst=output_model_dir)
+shutil.copyfile(src='/data3/tangt/models/ARTS/lib/core/base.py', dst=output_model_dir)
 
 from core.base import Trainer, Tester, LiftTrainer, LiftTester
 

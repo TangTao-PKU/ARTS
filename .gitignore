@@ -9,10 +9,12 @@ ViTpose/
 mmcv/
 data/
 demo/
-pose_detector/
-smplpytorch/
+
 ./ViTpose
 ./mmcv
 experiment/
 data/
 output/
+data_files/
+pose_detector/
+smplpytorch/
