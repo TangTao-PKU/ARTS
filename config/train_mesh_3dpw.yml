@@ -23,7 +23,7 @@ MODEL:
     # shape_loss_weight: 0.1
     # pose_loss_weight: 0.1
     posenet_pretrained: True
-    posenet_path: './experiment/exp_03-01_16_10/checkpoint/best.pth.tar'   # 16frame
+    posenet_path: './experiment/ARTS_PoseEstimation/checkpoint/best.pth.tar'   # 16frame
     # posenet_path: './experiment/exp_03-07_10_36/checkpoint/best.pth.tar'   # 2frame
     # posenet_path: './experiment/exp_03-07_10_38/checkpoint/best.pth.tar'   # 4frame
     # posenet_path: './experiment/exp_03-07_21_29/checkpoint/best.pth.tar'   # 8frame

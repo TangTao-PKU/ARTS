@@ -101,7 +101,7 @@ def get_joint_setting(mesh_model, joint_category='coco'):
             (13, 15),  # (5, 6), #(11, 12),
             (17, 11), (17, 12), (17, 18), (18, 5), (18, 6), (18, 0))
         flip_pairs = ((1, 2), (3, 4), (5, 6), (7, 8), (9, 10), (11, 12), (13, 14), (15, 16))
-        model_chk_path = './experiment/exp_03-11_00_11/checkpoint/best.pth.tar'
+        model_chk_path = './experiment/ARTS_Demo_Model/checkpoint/best.pth.tar'
  
     else:
         raise NotImplementedError(f"{joint_category}: unknown joint set category")

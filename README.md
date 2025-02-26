@@ -84,6 +84,29 @@ ${Project}
 |   |-- multiple_datasets.py
 ```
 
+## Quick Demo
+1. Install [ViTPose](https://github.com/ViTAE-Transformer/ViTPose). PMCE uses the off-the-shift 2D pose detectors to detect persons from images. Here we take and install ViTPose. 
+```bash
+git clone https://github.com/open-mmlab/mmcv.git
+cd mmcv
+git checkout v1.3.9
+MMCV_WITH_OPS=1 pip install -e .
+cd ..
+git clone https://github.com/ViTAE-Transformer/ViTPose.git
+cd ViTPose
+pip install -v -e .
+```
+2. Download the pre-trained ViTPose model `vitpose-h-multi-coco.pth` from [OneDrive](https://1drv.ms/f/s!Alg46BPWJg_Xgj6Zim2WCoF5SnbL?e=dtnem2). Put it below `./pose_detector` folder.
+3. Download the pre-trained PMCE model `ARTS_Demo_Model` and `ARTS_PoseEstimation` from [GoogleDrive](https://drive.google.com/drive/folders/1txQWReexVOLjpmgi426vMCw0Itq4K6C0?usp=sharing). Put it below `./experiment` folder.
+4. Prepare the input video `*.mp4` and put it below `./demo` folder. 
+5. Run. The output is at `./output` folder.
+```bash
+# Change 'sample_video' to your video name.
+sh ./main/demo.sh 
+or
+python ./main/run_demo.py --vid_file demo/sample_video.mp4 --gpu 0
+```
+
 ### Train
 Stage 1 : Train the 3D pose estimation.
 ```bash
