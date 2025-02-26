@@ -127,7 +127,7 @@ bash train_mesh_3dpw.sh
 ```
 
 ### Test
-To test on a pre-trained pose estimation model (Stage 1).
+To test on a pre-trained pose estimation model (Stage 1). Download the pre-trained ARTS model `ARTS_Demo_Model`(3DPW Dataset) and `ARTS_PoseEstimation`(3DPW Dataset) from [GoogleDrive](https://drive.google.com/drive/folders/1txQWReexVOLjpmgi426vMCw0Itq4K6C0?usp=sharing). Put it below `./experiment` folder.
 ```bash
 # Human3.6M
 bash test_pose_h36m.sh
