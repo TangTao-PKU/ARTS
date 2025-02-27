@@ -10,7 +10,7 @@ mmcv/
 data/
 demo/
 
-./ViTpose
+./ViTPose
 ./mmcv
 experiment/
 data/
