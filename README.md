@@ -91,7 +91,7 @@ git clone https://github.com/open-mmlab/mmcv.git
 cd mmcv
 git checkout v1.3.9
 MMCV_WITH_OPS=1 pip install -e .
-(or you may try: pip install mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html)
+(or pip install mmcv-full==1.5.0 -f https://download.openmmlab.com/mmcv/dist/cu113/torch1.10.0/index.html)
 cd ..
 git clone https://github.com/ViTAE-Transformer/ViTPose.git
 cd ViTPose
